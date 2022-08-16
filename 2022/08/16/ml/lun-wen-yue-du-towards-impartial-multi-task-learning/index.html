@@ -390,7 +390,7 @@
 <p>这篇文章的推导过程还是比较精妙的，我只看懂了70%。</p>
 <h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><p>MTL的问题中平衡方法分为loss balance和gradients balance两种，这篇文章综合了这两种方法。</p>
 <p>详细解读过程可以看论文阅读的PDF。</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220816171337469.png" alt="image-20220816171337469"></p>
+<p><img src="http://img.meditate.eu.org/note/image-20220816171337469.png" alt="IMTL的算法过程"></p>
 <p>gradients balance在文章中提出的方法是IMTL-G，用来更新共享层的参数。</p>
 <p>loss balance提出的方法是IMTL-L，通过认为构造scaled loss函数来达到目的。</p>
 <p>文章中提出的scaled loss如下所示：<br>$$<br>g\left( s \right) =e^sL\left( \theta \right) -s<br>$$<br>这个函数是关于s和$\theta$的函数，s是缩放系数，$\theta$是各个任务单独的权重，这样就可以在模型中分别求偏导来更新两个变量。</p>

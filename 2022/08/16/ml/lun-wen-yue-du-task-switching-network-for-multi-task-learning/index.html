@@ -390,7 +390,7 @@ TSN
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>这篇论文提出了任务交换网络（TSN），首次使用单编码器-单解码器的结构显著减少了参数量。</p>
-<h1 id="TSN"><a href="#TSN" class="headerlink" title="TSN"></a>TSN</h1><p><img src="http://img.meditate.eu.org/note/image-20220808230903682.png" alt="image-20220808230903682"></p>
+<h1 id="TSN"><a href="#TSN" class="headerlink" title="TSN"></a>TSN</h1><p><img src="http://img.meditate.eu.org/note/image-20220808230903682.png" alt="TSN的总体结构"></p>
 <p>主干网络是Resnet-18，解码器中每一层会接受上一层中上采样后的特征图拼接上本层的特征图。</p>
 <p>与以往的模型最大的区别在于输出后面只接了一个头（decoder）。做卷积之后利用这一个头去完成不同的任务。为了区分不同的任务，引入了Task Embedding，为每个任务得到一个$l_{\tau}$向量通过某种方式区分不同的任务。输出通道数的选择也是有讲究的，一般<strong>取所有任务中所需输出的最大的通道数</strong>。这样对于其他的任务，可以沿通道执行平均池化来适应不同的任务。（多说一句，平均池化是没有参数的，所以不会增加额外的参数）</p>
 <h2 id="Task-Embedding-Network"><a href="#Task-Embedding-Network" class="headerlink" title="Task Embedding Network"></a>Task Embedding Network</h2><p>这是一个得到$l_{\tau}$向量的过程。如图中的左下角</p>

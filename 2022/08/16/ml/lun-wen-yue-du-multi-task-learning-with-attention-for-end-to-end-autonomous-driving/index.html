@@ -394,15 +394,15 @@
 <h1 id="CBAM"><a href="#CBAM" class="headerlink" title="CBAM"></a>CBAM</h1><p>文章中用到了CBAM模块，首先对它进行一个介绍。</p>
 <p><strong>卷积块注意模块（CBAM）</strong>融合了通道注意力机制和空间注意力机制。采用模块化的设计，几乎可以没有开销地嵌入任何网络。</p>
 <p>总体的结构如下图，它首先做通道注意力，再做空间注意力</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220810100551027.png" alt="image-20220810100551027"></p>
-<h2 id="通道注意力模块"><a href="#通道注意力模块" class="headerlink" title="通道注意力模块"></a>通道注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810100817512.png" alt="image-20220810100817512"></p>
+<p><img src="http://img.meditate.eu.org/note/image-20220810100551027.png" alt="卷积块注意模块（CBAM）"></p>
+<h2 id="通道注意力模块"><a href="#通道注意力模块" class="headerlink" title="通道注意力模块"></a>通道注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810100817512.png" alt="通道注意力模块"></p>
 <ol>
 <li>首先在每个通道上做最大池化和平均池化</li>
 <li>分别将两个向量输入一个全连接的网络，输出要与输入向量的长度保持一致</li>
 <li>将两个向量相加，经过Sigmoid函数。得到的向量表示每个通道对应的权重。</li>
 <li>将向量与输入的特征图的每个对应的通道相乘</li>
 </ol>
-<h2 id="空间注意力模块"><a href="#空间注意力模块" class="headerlink" title="空间注意力模块"></a>空间注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810101815278.png" alt="image-20220810101815278"></p>
+<h2 id="空间注意力模块"><a href="#空间注意力模块" class="headerlink" title="空间注意力模块"></a>空间注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810101815278.png" alt="空间注意力模块"></p>
 <ol>
 <li>沿着通道做最大池化和平均池化。以最大池化为例：就是在所有通道的对应像素点中取一个最大值。得到两个二维的特征图。</li>
 <li>将两个特征图沿着通道拼起来，通过一个卷积层，文章中是7*7的卷积，得到一个<strong>二维</strong>的特征图。</li>
@@ -413,9 +413,9 @@
 <li>CBAM并不会影响原来的网络结构</li>
 <li>CBAM加在残差连接之前</li>
 </ul>
-<p><img src="http://img.meditate.eu.org/note/image-20220810102431347.png" alt="image-20220810102431347"></p>
-<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p><img src="http://img.meditate.eu.org/note/image-20220810103009942.png" alt="image-20220810103009942"></p>
-<h2 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h2><p><img src="http://img.meditate.eu.org/note/image-20220810123214170.png" alt="image-20220810123214170"></p>
+<p><img src="http://img.meditate.eu.org/note/image-20220810102431347.png" alt="Resnet中加入CBAM"></p>
+<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p><img src="http://img.meditate.eu.org/note/image-20220810103009942.png" alt="模型结构"></p>
+<h2 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h2><p><img src="http://img.meditate.eu.org/note/image-20220810123214170.png" alt="Encoder的结构"></p>
 <p>主干网络采用了ResNet-34，引申出了两种type。type1后续会接上decoder用于处理语义分割，深度预测的任务。type2会去处理信号灯分类和控制预测。作者也对这种操作做了简单的说明，因为语义分割和深度预测往往需要更高分辨率的特征图以免丢失细节，而信号灯分类和控制预测需要隐藏抽象特征。</p>
 <p>注意这里的Conv Block，经过池化以后通道数是不变的，为了能与下一层的特征图相加，接上了一个卷积来使通道数翻倍。</p>
 <h2 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h2><p>这一部分文章写得有点坑，图中两个decoder的结构参考了一篇论文，然而那篇论文又参考了另一篇论文o(╥﹏╥)o。然而，我读了两篇论文后，发现这里的结构不可能完全与它们一致。所以实际结构怎么样只有看了源码才知道。不过这并不影响理解这部分。</p>
