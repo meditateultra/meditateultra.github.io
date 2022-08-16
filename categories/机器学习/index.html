@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分类: 学习, Meditate">
+    <meta name="keywords" content="分类: 机器学习, Meditate">
     <meta name="description" content="Meditate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -28,7 +28,7 @@
     </style>
 
 
-    <title>分类: 学习 | Meditate</title>
+    <title>分类: 机器学习 | Meditate</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -250,20 +250,29 @@
                 
                 
                 
-                <a href="/categories/%E5%AD%A6%E4%B9%A0/" title="学习: 1">
+                <a href="/categories/%E8%B5%84%E6%BA%90/" title="资源: 1">
                     <span class="chip center-align waves-effect waves-light
-                             chip-active "
-                            style="background-color: #F9EBEA;">学习
+                             chip-default "
+                            style="background-color: #F9EBEA;">资源
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/%E8%B5%84%E6%BA%90/" title="资源: 1">
+                <a href="/categories/%E5%BC%80%E5%8F%91/" title="开发: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F5EEF8;">资源
+                            style="background-color: #F5EEF8;">开发
                         <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-active "
+                            style="background-color: #D5F5E3;">机器学习
+                        <span class="tag-length">3</span>
                     </span>
                 </a>
                 
@@ -281,32 +290,31 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2022/06/24/docker/">
+                    <a href="/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="docker">
+                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【论文阅读】Towards Impartial Multi-Task Learning">
                             
-                            <span class="card-title">docker</span>
+                            <span class="card-title">【论文阅读】Towards Impartial Multi-Task Learning</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                docker英文文档：https://docs.docker.com/
-docker中文文档：https://gitee.com/docker_practice/docker_practice#https://gitee.com/link?
+                                文章主要提出了一种方法能够均衡的学习multi task learning问题，这种方法的优点是不需要对分布有任何假设，并且对gradient scale的过程是和训练过程同步的，同时文章发现对loss balance和gradients 
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-24
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="post-category">
-                                    学习
+                                <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    机器学习
                                 </a>
                                 
                                 
@@ -317,12 +325,104 @@ docker中文文档：https://gitee.com/docker_practice/docker_practice#https://g
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/docker/">
-                            <span class="chip bg-color">docker</span>
+                        <a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0/">
+                            <span class="chip bg-color">多任务学习</span>
                         </a>
                         
-                        <a href="/tags/%E5%90%8E%E7%AB%AF/">
-                            <span class="chip bg-color">后端</span>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/08/16/ml/lun-wen-yue-du-task-switching-network-for-multi-task-learning/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="【论文阅读】Task Switching Network for Multi-task Learning">
+                            
+                            <span class="card-title">【论文阅读】Task Switching Network for Multi-task Learning</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                这篇论文提出了任务交换网络（TSN），首次使用单编码器-单解码器的结构显著减少了参数量。
+TSN
+主干网络是Resnet-18，解码器中每一层会接受上一层中上采样后的特征图拼接上本层的特征图。
+与以往的模型最大的区别在于输出后面只接了一个头
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    机器学习
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0/">
+                            <span class="chip bg-color">多任务学习</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/08/16/ml/lun-wen-yue-du-multi-task-learning-with-attention-for-end-to-end-autonomous-driving/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="【论文阅读】Multi-task Learning with Attention for End-to-end Autonomous Driving">
+                            
+                            <span class="card-title">【论文阅读】Multi-task Learning with Attention for End-to-end Autonomous Driving</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                这篇文章是自动驾驶领域的文章，自动驾驶领域往往有两类任务：感知环境（如：语义分割），驾驶决策（根据周围环境做出相应的操作）。
+这篇文章聚焦于自动驾驶中的点对点的导航问题，将多任务学习引入了自动驾驶，并且引入了注意力机制有效提高了准确率，文末
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    机器学习
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0/">
+                            <span class="chip bg-color">多任务学习</span>
                         </a>
                         
                     </div>
