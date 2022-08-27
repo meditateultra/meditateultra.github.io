@@ -4,8 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="【论文阅读】Towards Impartial Multi-Task Learning, Meditate">
-    <meta name="description" content="文章主要提出了一种方法能够均衡的学习multi task learning问题，这种方法的优点是不需要对分布有任何假设，并且对gradient scale的过程是和训练过程同步的，同时文章发现对loss balance和gradients ">
+    <meta name="keywords" content="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control, Meditate">
+    <meta name="description" content="本文基于机器人场景，提出了一种multi-DDPG的算法，将DDPG拓展到了多任务场景，使机器人能够学习多个连续的动作。并且引入mlpconv显著减少了模型参数量，将图像和传感器数据组合为输入。
+MLPConvmlpconv
+一般卷积操作可">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -28,7 +30,7 @@
     </style>
 
 
-    <title>【论文阅读】Towards Impartial Multi-Task Learning | Meditate</title>
+    <title>【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control | Meditate</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -211,12 +213,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">【论文阅读】Towards Impartial Multi-Task Learning</h1>
+                    <h1 class="description center-align post-title">【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</h1>
                 </div>
             </div>
         </div>
@@ -357,7 +359,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-08-16
+                    2022-08-24
                 </div>
                 
 
@@ -386,16 +388,17 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章主要提出了一种方法能够均衡的学习multi task learning问题，这种方法的优点是不需要对分布有任何假设，并且对gradient scale的过程是和训练过程同步的，同时文章发现对loss balance和gradients balance是互补的，因此提出了一种混合的方法能够更好平衡gradients和losses。</p>
-<p>这篇文章的推导过程还是比较精妙的，我只看懂了70%。</p>
-<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><p>MTL的问题中平衡方法分为loss balance和gradients balance两种，这篇文章综合了这两种方法。</p>
-<p>详细解读过程可以看论文阅读的PDF。</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220816171337469.png" alt="IMTL的算法过程"></p>
-<p>gradients balance在文章中提出的方法是IMTL-G，用来更新共享层的参数。</p>
-<p>loss balance提出的方法是IMTL-L，通过认为构造scaled loss函数来达到目的。</p>
-<p>文章中提出的scaled loss如下所示：<br>$$<br>g\left( s \right) =e^sL\left( \theta \right) -s<br>$$<br>这个函数是关于s和$\theta$的函数，s是缩放系数，$\theta$是各个任务单独的权重，这样就可以在模型中分别求偏导来更新两个变量。</p>
-<p>$L\left( \theta \right) $是原始损失，$e^s$是为了将s映射到正实数。-s是正则化项，为了避免s找到负无穷的平凡解。</p>
-<p>构造scaled loss的原因和过程可以看论文PDF。</p>
+                <p>本文基于机器人场景，提出了一种multi-DDPG的算法，将DDPG拓展到了多任务场景，使机器人能够学习多个连续的动作。并且引入mlpconv显著减少了模型参数量，将图像和传感器数据组合为输入。</p>
+<h1 id="MLPConv"><a href="#MLPConv" class="headerlink" title="MLPConv"></a>MLPConv</h1><h2 id="mlpconv"><a href="#mlpconv" class="headerlink" title="mlpconv"></a>mlpconv</h2><p><img src="http://img.meditate.eu.org/note/20210213230837584.png" alt="mlpconv的结构"></p>
+<p>一般卷积操作可以看成特征的提取操作，而一般卷积一层只相当于一个线性操作，所以其只能提取出线性特征。所以作者就想能否在卷积层后也加入一个MLP使得每层卷积操作能够提取非线性特征。而为了减少参数量，又用1*1的卷积层模拟了MLP</p>
+<p>一个mlpconv卷积块是1个卷积后加<strong>两个</strong>1*1的卷积，但是每个1*1卷积后面都跟着一个ReLu, 所以可以引入更多的非线性。</p>
+<p>这里的图画的是真的坑，这里的$C_2$指的是1*1卷积核的数量，展开的这一个长条形的向量指的是同一个位置的像素在经过$C_2$个卷积过后的值。中间的类似全连接的部分指的是1*1卷积，因为对同一个像素点施加不同的1*1卷积就类似于全连接的结构。也就是相当于在不同通道之间进行全连接，==而不是把特征图展平。==</p>
+<h2 id="全局平均池化"><a href="#全局平均池化" class="headerlink" title="全局平均池化"></a>全局平均池化</h2><p>mlpconv还提出了全局平均池化的概念。</p>
+<p>Global Average Pooling主要为了解决全连接层参数过多的问题，早期对于分类问题，最后一个卷积层的 Feature Map 通常与全连接层连接，最后通过 <strong>softmax 逻辑回归分类</strong>。全连接层带来的问题就是参数空间过大，容易过拟合</p>
+<p> global average pooling的概念非常简单，分类任务有多少个类别,就控制最终产生多少个feature map，也就是多少通道数。然后对于整个特征图做平均池化。就得到与通道数相等的类别数。</p>
+<h1 id="Multi-DDPG"><a href="#Multi-DDPG" class="headerlink" title="Multi-DDPG"></a>Multi-DDPG</h1><p><img src="http://img.meditate.eu.org/note/image-20220824144142878.png" alt="multi-DDPG结构"></p>
+<p>multi-DDPG是多Actor，单Critic的结构。也就意味着一个Critic要对所有的Actor打分。在Critic模型中，最后一个全连接层是非共享的，前面的部分都是对个Actor共享的。</p>
+<p><img src="http://img.meditate.eu.org/note/image-20220824144310836.png" alt="multi-DDPG算法流程"></p>
 
                 
             </div>
@@ -422,7 +425,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://meditate.eu.org/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/">http://meditate.eu.org/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/</a>
+                    <a href="http://meditate.eu.org/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/">http://meditate.eu.org/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -639,13 +642,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/">
+                <a href="/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization">
                         
-                        <span class="card-title">【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</span>
+                        <span class="card-title">【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -656,7 +659,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-24
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-25
                         </span>
                         <span class="publish-author">
                             
@@ -688,13 +691,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/16/ml/lun-wen-yue-du-task-switching-network-for-multi-task-learning/">
+                <a href="/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="【论文阅读】Task Switching Network for Multi-task Learning">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【论文阅读】Towards Impartial Multi-Task Learning">
                         
-                        <span class="card-title">【论文阅读】Task Switching Network for Multi-task Learning</span>
+                        <span class="card-title">【论文阅读】Towards Impartial Multi-Task Learning</span>
                     </div>
                 </a>
                 <div class="card-content article-content">

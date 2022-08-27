@@ -4,8 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="【论文阅读】Towards Impartial Multi-Task Learning, Meditate">
-    <meta name="description" content="文章主要提出了一种方法能够均衡的学习multi task learning问题，这种方法的优点是不需要对分布有任何假设，并且对gradient scale的过程是和训练过程同步的，同时文章发现对loss balance和gradients ">
+    <meta name="keywords" content="【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization, Meditate">
+    <meta name="description" content="将一个基础的网络分层并模块化，使用一个路由网络来为每个任务选择不同的模块，路由网络也可以学习。这就是所谓的软模块。
+用到的是SAC算法的改进型，文中引用的确实最原始的SAC文章（坑死）。改进的SAC取缔了V网络，并且温度系数$\alpha$">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -28,7 +29,7 @@
     </style>
 
 
-    <title>【论文阅读】Towards Impartial Multi-Task Learning | Meditate</title>
+    <title>【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization | Meditate</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -216,7 +217,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">【论文阅读】Towards Impartial Multi-Task Learning</h1>
+                    <h1 class="description center-align post-title">【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization</h1>
                 </div>
             </div>
         </div>
@@ -357,7 +358,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-08-16
+                    2022-08-25
                 </div>
                 
 
@@ -386,16 +387,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章主要提出了一种方法能够均衡的学习multi task learning问题，这种方法的优点是不需要对分布有任何假设，并且对gradient scale的过程是和训练过程同步的，同时文章发现对loss balance和gradients balance是互补的，因此提出了一种混合的方法能够更好平衡gradients和losses。</p>
-<p>这篇文章的推导过程还是比较精妙的，我只看懂了70%。</p>
-<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><p>MTL的问题中平衡方法分为loss balance和gradients balance两种，这篇文章综合了这两种方法。</p>
-<p>详细解读过程可以看论文阅读的PDF。</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220816171337469.png" alt="IMTL的算法过程"></p>
-<p>gradients balance在文章中提出的方法是IMTL-G，用来更新共享层的参数。</p>
-<p>loss balance提出的方法是IMTL-L，通过认为构造scaled loss函数来达到目的。</p>
-<p>文章中提出的scaled loss如下所示：<br>$$<br>g\left( s \right) =e^sL\left( \theta \right) -s<br>$$<br>这个函数是关于s和$\theta$的函数，s是缩放系数，$\theta$是各个任务单独的权重，这样就可以在模型中分别求偏导来更新两个变量。</p>
-<p>$L\left( \theta \right) $是原始损失，$e^s$是为了将s映射到正实数。-s是正则化项，为了避免s找到负无穷的平凡解。</p>
-<p>构造scaled loss的原因和过程可以看论文PDF。</p>
+                <p>将一个基础的网络分层并模块化，使用一个路由网络来为每个任务选择不同的模块，路由网络也可以学习。这就是所谓的软模块。</p>
+<p>用到的是SAC算法的改进型，文中引用的确实最原始的SAC文章（坑死）。改进的SAC取缔了V网络，并且温度系数$\alpha$不再固定死，而是通过梯度下降更新。</p>
+<h1 id="Soft-Modularization"><a href="#Soft-Modularization" class="headerlink" title="Soft Modularization"></a>Soft Modularization</h1><p><img src="http://img.meditate.eu.org/note/image-20220825211929434.png" alt="soft modularization"></p>
+<p>Base Policy有L层，每层由n个模块构成。Routing网络由L-1层的输出，每层都输出n*n的矩阵，代表了每个模块与下一层中模块之前连接的权重。$s_t$代表当前状态，$z_{\tau}$代表了与任务相关的one-hot编码。两个输入经过全连接层都会得到一个D维的向量，D在这里是一个超参数。</p>
+<p>最后Base Policy输出的是$\mu ,\sigma$代表一个分布。</p>
+<p>不同任务的难易程度不同造成了收敛速度也不同。因此要在各个任务的损失函数前加个权重，这个权重与$\alpha$相关。<br>$$<br>w_i=\frac{\exp \left( -\alpha <em>i \right)}{\sum</em>{j=1}^M{\exp \left( -\alpha _i \right)}}<br>$$</p>
 
                 
             </div>
@@ -422,7 +419,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://meditate.eu.org/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/">http://meditate.eu.org/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/</a>
+                    <a href="http://meditate.eu.org/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/">http://meditate.eu.org/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -635,17 +632,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/">
+                <a href="/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization">
                         
-                        <span class="card-title">【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</span>
+                        <span class="card-title">【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -655,9 +653,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-25
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -670,6 +668,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -688,13 +687,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/16/ml/lun-wen-yue-du-task-switching-network-for-multi-task-learning/">
+                <a href="/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="【论文阅读】Task Switching Network for Multi-task Learning">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control">
                         
-                        <span class="card-title">【论文阅读】Task Switching Network for Multi-task Learning</span>
+                        <span class="card-title">【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -705,7 +704,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-24
                             </span>
                         <span class="publish-author">
                             

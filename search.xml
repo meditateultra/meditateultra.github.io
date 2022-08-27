@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization</title>
+      <link href="/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/"/>
+      <url>/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/</url>
+      
+        <content type="html"><![CDATA[<p>将一个基础的网络分层并模块化，使用一个路由网络来为每个任务选择不同的模块，路由网络也可以学习。这就是所谓的软模块。</p><p>用到的是SAC算法的改进型，文中引用的确实最原始的SAC文章（坑死）。改进的SAC取缔了V网络，并且温度系数$\alpha$不再固定死，而是通过梯度下降更新。</p><h1 id="Soft-Modularization"><a href="#Soft-Modularization" class="headerlink" title="Soft Modularization"></a>Soft Modularization</h1><p><img src="http://img.meditate.eu.org/note/image-20220825211929434.png" alt="soft modularization"></p><p>Base Policy有L层，每层由n个模块构成。Routing网络由L-1层的输出，每层都输出n*n的矩阵，代表了每个模块与下一层中模块之前连接的权重。$s_t$代表当前状态，$z_{\tau}$代表了与任务相关的one-hot编码。两个输入经过全连接层都会得到一个D维的向量，D在这里是一个超参数。</p><p>最后Base Policy输出的是$\mu ,\sigma$代表一个分布。</p><p>不同任务的难易程度不同造成了收敛速度也不同。因此要在各个任务的损失函数前加个权重，这个权重与$\alpha$相关。<br>$$<br>w_i=\frac{\exp \left( -\alpha <em>i \right)}{\sum</em>{j=1}^M{\exp \left( -\alpha _i \right)}}<br>$$</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 多任务学习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</title>
+      <link href="/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/"/>
+      <url>/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/</url>
+      
+        <content type="html"><![CDATA[<p>本文基于机器人场景，提出了一种multi-DDPG的算法，将DDPG拓展到了多任务场景，使机器人能够学习多个连续的动作。并且引入mlpconv显著减少了模型参数量，将图像和传感器数据组合为输入。</p><h1 id="MLPConv"><a href="#MLPConv" class="headerlink" title="MLPConv"></a>MLPConv</h1><h2 id="mlpconv"><a href="#mlpconv" class="headerlink" title="mlpconv"></a>mlpconv</h2><p><img src="http://img.meditate.eu.org/note/20210213230837584.png" alt="mlpconv的结构"></p><p>一般卷积操作可以看成特征的提取操作，而一般卷积一层只相当于一个线性操作，所以其只能提取出线性特征。所以作者就想能否在卷积层后也加入一个MLP使得每层卷积操作能够提取非线性特征。而为了减少参数量，又用1*1的卷积层模拟了MLP</p><p>一个mlpconv卷积块是1个卷积后加<strong>两个</strong>1*1的卷积，但是每个1*1卷积后面都跟着一个ReLu, 所以可以引入更多的非线性。</p><p>这里的图画的是真的坑，这里的$C_2$指的是1*1卷积核的数量，展开的这一个长条形的向量指的是同一个位置的像素在经过$C_2$个卷积过后的值。中间的类似全连接的部分指的是1*1卷积，因为对同一个像素点施加不同的1*1卷积就类似于全连接的结构。也就是相当于在不同通道之间进行全连接，==而不是把特征图展平。==</p><h2 id="全局平均池化"><a href="#全局平均池化" class="headerlink" title="全局平均池化"></a>全局平均池化</h2><p>mlpconv还提出了全局平均池化的概念。</p><p>Global Average Pooling主要为了解决全连接层参数过多的问题，早期对于分类问题，最后一个卷积层的 Feature Map 通常与全连接层连接，最后通过 <strong>softmax 逻辑回归分类</strong>。全连接层带来的问题就是参数空间过大，容易过拟合</p><p> global average pooling的概念非常简单，分类任务有多少个类别,就控制最终产生多少个feature map，也就是多少通道数。然后对于整个特征图做平均池化。就得到与通道数相等的类别数。</p><h1 id="Multi-DDPG"><a href="#Multi-DDPG" class="headerlink" title="Multi-DDPG"></a>Multi-DDPG</h1><p><img src="http://img.meditate.eu.org/note/image-20220824144142878.png" alt="multi-DDPG结构"></p><p>multi-DDPG是多Actor，单Critic的结构。也就意味着一个Critic要对所有的Actor打分。在Critic模型中，最后一个全连接层是非共享的，前面的部分都是对个Actor共享的。</p><p><img src="http://img.meditate.eu.org/note/image-20220824144310836.png" alt="multi-DDPG算法流程"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 多任务学习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【论文阅读】Towards Impartial Multi-Task Learning</title>
       <link href="/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/"/>
       <url>/2022/08/16/ml/lun-wen-yue-du-towards-impartial-multi-task-learning/</url>
