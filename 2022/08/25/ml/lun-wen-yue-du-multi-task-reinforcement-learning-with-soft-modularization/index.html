@@ -396,7 +396,7 @@
 <h1 id="Soft-Modularization"><a href="#Soft-Modularization" class="headerlink" title="Soft Modularization"></a>Soft Modularization</h1><p><img src="http://img.meditate.eu.org/note/image-20220825211929434.png" alt="soft modularization"></p>
 <p>Base Policy有L层，每层由n个模块构成。Routing网络由L-1层的输出，每层都输出n*n的矩阵，代表了每个模块与下一层中模块之前连接的权重。$s_t$代表当前状态，$z_{\tau}$代表了与任务相关的one-hot编码。两个输入经过全连接层都会得到一个D维的向量，D在这里是一个超参数。</p>
 <p>最后Base Policy输出的是$\mu ,\sigma$代表一个分布。</p>
-<p>不同任务的难易程度不同造成了收敛速度也不同。因此要在各个任务的损失函数前加个权重，这个权重与$\alpha$相关。<br>$$<br>w_{i} =\frac{e^{-\alpha <em>{i} } }{\sum</em>{j=1}^{M} e^{-\alpha _{i}} }<br>$$</p>
+<p>不同任务的难易程度不同造成了收敛速度也不同。因此要在各个任务的损失函数前加个权重，这个权重与$\alpha$相关。<br>$$<br>w_{i} =\frac{e^{-\alpha <em>{i} } }{\sum</em>{j=1}^{M} e^{-\alpha _{i}} }<br>$$<br>而$\alpha$则是通过梯度下降更新的。</p>
 
                 
             </div>
