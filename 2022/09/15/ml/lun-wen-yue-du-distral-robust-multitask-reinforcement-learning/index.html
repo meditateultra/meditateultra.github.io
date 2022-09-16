@@ -4,9 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization, Meditate">
-    <meta name="description" content="将一个基础的网络分层并模块化，使用一个路由网络来为每个任务选择不同的模块，路由网络也可以学习。这就是所谓的软模块。
-用到的是SAC算法的改进型，文中引用的确实最原始的SAC文章（坑死）。改进的SAC取缔了V网络，并且温度系数$\alpha$">
+    <meta name="keywords" content="【论文阅读】Distral Robust Multitask Reinforcement Learning, Meditate">
+    <meta name="description" content="本文提出了一种同时在多个任务上训练的强化学习方法，叫做Distral。主要的想法是把各个任务上学到的策略进行提纯（distill，本意是蒸馏）得到一个共有的策略，然后再使用这个共有的策略去指导各个特定任务上的策略进行更好的学习。文章称，这种">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -29,7 +28,7 @@
     </style>
 
 
-    <title>【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization | Meditate</title>
+    <title>【论文阅读】Distral Robust Multitask Reinforcement Learning | Meditate</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -216,12 +215,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">【论文阅读】Multi-Task Reinforcement Learning with Soft Modularization</h1>
+                    <h1 class="description center-align post-title">【论文阅读】Distral Robust Multitask Reinforcement Learning</h1>
                 </div>
             </div>
         </div>
@@ -362,7 +361,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-08-25
+                    2022-09-15
                 </div>
                 
 
@@ -391,12 +390,31 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>将一个基础的网络分层并模块化，使用一个路由网络来为每个任务选择不同的模块，路由网络也可以学习。这就是所谓的软模块。</p>
-<p>用到的是SAC算法的改进型，文中引用的确实最原始的SAC文章（坑死）。改进的SAC取缔了V网络，并且温度系数$\alpha$不再固定死，而是通过梯度下降更新。<strong>SAC的温度系数自学版本没有完全理解，最好去看看。</strong></p>
-<h1 id="Soft-Modularization"><a href="#Soft-Modularization" class="headerlink" title="Soft Modularization"></a>Soft Modularization</h1><p><img src="http://img.meditate.eu.org/note/image-20220825211929434.png" alt="soft modularization"></p>
-<p>Base Policy有L层，每层由n个模块构成。Routing网络由L-1层的输出，每层都输出n*n的矩阵，代表了每个模块与下一层中模块之前连接的权重。$s_t$代表当前状态，$z_{\tau}$代表了与任务相关的one-hot编码。两个输入经过全连接层都会得到一个D维的向量，D在这里是一个超参数。</p>
-<p>最后Base Policy输出的是$\mu ,\sigma$代表一个分布。</p>
-<p>不同任务的难易程度不同造成了收敛速度也不同。因此要在各个任务的损失函数前加个权重，这个权重与$\alpha$相关。<br>$$<br>w_{i} =\frac{e^{-\alpha <em>{i} } }{\sum</em>{j=1}^{M} e^{-\alpha _{i}} }<br>$$<br>而$\alpha$则是通过梯度下降更新的。</p>
+                <p>本文提出了一种同时在多个任务上训练的强化学习方法，叫做Distral。主要的想法是把各个任务上学到的策略进行提纯（distill，本意是蒸馏）得到一个共有的策略，然后再使用这个共有的策略去指导各个特定任务上的策略进行更好的学习。文章称，这种多任务的强化学习方法避免了不同任务产生互斥的梯度，反而干扰学习；同时，也避免了各个任务学习进度不一致，导致某个任务的学习主导了整体的学习。</p>
+<p>这个视频讲得不错，但是有一些错误，以自己笔记为准： <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1PQ4y1M7nG?share_source=copy_web&amp;vd_source=f038e298fba3a40848f18a2c0868db34">https://www.bilibili.com/video/BV1PQ4y1M7nG?share_source=copy_web&amp;vd_source=f038e298fba3a40848f18a2c0868db34</a></p>
+<p>可以结合这篇文章来看：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51091244">https://zhuanlan.zhihu.com/p/51091244</a></p>
+<p>关于蒸馏学习，简单来说就是把一个模型的内容提炼到一个新的模型。可以看这篇：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/258390817">https://zhuanlan.zhihu.com/p/258390817</a></p>
+<h1 id="Distral"><a href="#Distral" class="headerlink" title="Distral"></a>Distral</h1><h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p><img src="http://img.meditate.eu.org/note/image-20220915152930481.png" alt="Distral架构"></p>
+<p>$\pi_0$是一个公共策略，是从$\pi_1,\pi_2,\pi_3,\pi_4$中蒸馏出来的一个<strong>中心策略</strong>。得到$\pi_0$后会用来指导$\pi_1,\pi_2,\pi_3,\pi_4$这四个不同的任务的策略。作者说这种基于蒸馏和迁移学习的多任务学习方式效果优于共享模型权重的方式。</p>
+<h2 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h2><p>$$<br>\begin{aligned}<br>J\left(\pi_0,\left{\pi_i\right}<em>{i=1}^n\right) &amp;=\sum_i \mathbb{E}</em>{\pi_i}\left[\sum_{t \geq 0} \gamma^t R_i\left(a_t, s_t\right)-c_{\mathrm{KL}} \gamma^t \log \frac{\pi_i\left(a_t \mid s_t\right)}{\pi_0\left(a_t \mid s_t\right)}-c_{\mathrm{Ent}} \gamma^t \log \pi_i\left(a_t \mid s_t\right)\right] \<br>&amp;=\sum_i \mathbb{E}<em>{\pi_i}\left[\sum</em>{t \geq 0} \gamma^t R_i\left(a_t, s_t\right)+\frac{\gamma^t \alpha}{\beta} \log \pi_0\left(a_t \mid s_t\right)-\frac{\gamma^t}{\beta} \log \pi_i\left(a_t \mid s_t\right)\right]<br>\end{aligned}<br>$$</p>
+<p>作者构造了上面这个目标函数，那么我们希望最大化这个目标函数。其中$\alpha =\frac{c_{\text{KL}}}{c_{\text{KL}}+c_{\text{Ent}}}$，$\beta=\frac{1}{c_\text{KL}+c_\text{Ent}}$，$c_\text{KL}$和$c_\text{Ent}$是决定KL和熵正则化强度的大小的标量因子，二者都是大于0的。</p>
+<p>解释一下额外添加的两项的作用：</p>
+<p><strong>KL散度项正则化项：</strong>$c_{\mathrm{KL}} \gamma^t \log \frac{\pi_i\left(a_t \mid s_t\right)}{\pi_0\left(a_t \mid s_t\right)}$。约束了各个策略$\pi_i$不要离中心策略$\pi_0$太远。KL散度衡量了两个分布之间的差异，两个分布完全一致，散度就为0。否则散度较大。这里减去散度项，在使$J$尽可能大时，散度项就要尽可能小。</p>
+<p><strong>熵正则化项：</strong>$-c_{\mathrm{Ent}} \gamma^t \log \pi_i\left(a_t \mid s_t\right)$。鼓励探索，避免策略只会收敛到解决那个简单的任务。作者举了一个例子：在多任务场景下，如果有一个任务特别的简单，获得奖励非常容易。那么在没有熵正则化项的情况下，模型会收敛到解决那个简单任务然后不再去探索其他较难的任务。这会导致次优策略。这里这个熵项省略了一个乘数，不过并不影响理解它。因为熵的展开本身就存在一个负号，这里其实可以把负号看成一个整体，相当于加上了一个熵项。熵项越大说明策略不确定越高，越鼓励探索，与最大$J$的目标一致。</p>
+<p>（正则化项：约束优化朝我们想要的方向前进）</p>
+<h2 id="两种优化方式"><a href="#两种优化方式" class="headerlink" title="两种优化方式"></a>两种优化方式</h2><h3 id="交替优化"><a href="#交替优化" class="headerlink" title="交替优化"></a>交替优化</h3><p>交替优化就是指先蒸馏一个中心策略，再用中心策略去指导其他的任务。这样依次交替强化两种策略。</p>
+<h4 id="固定-pi-i-优化-pi-0"><a href="#固定-pi-i-优化-pi-0" class="headerlink" title="固定${\pi_i}$优化$\pi_0$"></a>固定${\pi_i}$优化$\pi_0$</h4><p>这实际上就是一个蒸馏过程，此时$\pi_i$项为常数，只需要最大化箭头右边的那项即可。可以用策略梯度等方法。</p>
+<p><img src="http://img.meditate.eu.org/note/image-20220915162252682.png" alt="蒸馏过程"></p>
+<h4 id="固定-pi-0-优化-pi-i"><a href="#固定-pi-0-优化-pi-i" class="headerlink" title="固定${\pi_0}$优化$\pi_i$"></a>固定${\pi_0}$优化$\pi_i$</h4><p>这样可以对每个$\pi_i$单独优化，可其看成一个附加熵项的单任务强化学习。推导过程如下：</p>
+<p><img src="http://img.meditate.eu.org/note/46126295643600.png" alt="推一下带熵的reward函数"></p>
+<p>这样奖励函数可以用soft Q Learning优化（详见自己的笔记）。</p>
+<p><img src="http://img.meditate.eu.org/note/46767864258564.png" alt="套用SQL的细节"></p>
+<p>所以可以套用SQL的Q和V。带进去推一遍即可，得到Q和V。<br>$$<br>\begin{aligned}<br>V_i\left(s_t\right) &amp;=\frac{1}{\beta} \log \sum_{a_t} \pi_0^\alpha\left(a_t \mid s_t\right) \exp \left[\beta Q_i\left(a_t, s_t\right)\right] \<br>Q_i\left(a_t, s_t\right) &amp;=R_i\left(a_t, s_t\right)+\gamma \sum p_i\left(s_{t+1} \mid s_t, a_t\right) V_i\left(s_{t+1}\right)<br>\end{aligned}<br>$$<br>可以推出$\pi_i$</p>
+<p><img src="http://img.meditate.eu.org/note/49077424938724.png" alt="推导策略i"></p>
+<h3 id="联合优化"><a href="#联合优化" class="headerlink" title="联合优化"></a>联合优化</h3><p>依次对$\pi_i$和$\pi_0$做SGD，最大化目标函数。联合优化比较简单</p>
+<h4 id="更好的策略表示"><a href="#更好的策略表示" class="headerlink" title="更好的策略表示"></a>更好的策略表示</h4><p>$\pi_0$的估计可以使用简单的玻尔兹曼策略表示，这里的$h_\theta(a_t|s_t)$就是代表$Q_\theta$<br>$$<br>\hat{\pi}<em>0\left(a_t \mid s_t\right)=\frac{\exp \left(h</em>{\theta_0}\left(a_t \mid s_t\right)\right.}{\sum_{a^{\prime}} \exp \left(h_{\theta_0}\left(a^{\prime} \mid s_t\right)\right)}<br>$$<br>对于$\pi_i$，作者提出了一个更好的表示方式。用$\pi_0$的共有部分和自己的特有部分来表示。</p>
+<p><img src="http://img.meditate.eu.org/note/image-20220915175805274.png" alt="更好的策略表示"><br>$$<br>\hat{\pi}<em>i\left(a_t \mid s_t\right)=\hat{\pi}<em>0^\alpha\left(a_t \mid s_t\right) \exp \left(\beta \hat{A}<em>i\left(a_t \mid s_t\right)\right)=\frac{\exp \left(\alpha h</em>{\theta_0}\left(a_t \mid s_t\right)+\beta f</em>{\theta_i}\left(a_t \mid s_t\right)\right)}{\sum</em>{a^{\prime}} \exp \left(\left(\alpha h_{\theta_0}\left(a^{\prime} \mid s_t\right)+\beta f_{\theta_i}\left(a^{\prime} \mid s_t\right)\right)\right.}<br>$$</p>
+<h4 id="策略梯度"><a href="#策略梯度" class="headerlink" title="策略梯度"></a>策略梯度</h4><p>于是就利用策略梯度对$\pi_i$和$\pi_0$分别优化。<br>$$<br>\begin{aligned}<br>\nabla_{\theta_i} J &amp;=\mathbb{E}<em>{\hat{\pi}<em>i}\left[\left(\sum</em>{t \geq 1} \nabla</em>{\theta_i} \log \hat{\pi}<em>i\left(a_t \mid s_t\right)\right)\left(\sum</em>{u \geq 1} \gamma^u\left(R_i^{\mathrm{reg}}\left(a_u, s_u\right)\right)\right)\right] \<br>&amp;=\mathbb{E}<em>{\hat{\pi}<em>i}\left[\sum</em>{t \geq 1} \nabla</em>{\theta_i} \log \hat{\pi}<em>i\left(a_t \mid s_t\right)\left(\sum</em>{u \geq t} \gamma^u\left(R_i^{\mathrm{reg}}\left(a_u, s_u\right)\right)\right)\right]<br>\end{aligned}<br>$$<br>其中：$R_i^{\operatorname{reg}}(a, s)=R_i(a, s)+\frac{\alpha}{\beta} \log \hat{\pi}<em>0(a \mid s)-\frac{1}{\beta} \log \hat{\pi}<em>i(a \mid s)$<br>$$<br>\begin{aligned}<br>\nabla</em>{\theta_0} J=&amp; \sum_i \mathbb{E}</em>{\hat{\pi}<em>i}\left[\sum</em>{t \geq 1} \nabla_{\theta_0} \log \hat{\pi}<em>i\left(a_t \mid s_t\right)\left(\sum</em>{u \geq t} \gamma^u\left(R_i^{\mathrm{reg}}\left(a_u, s_u\right)\right)\right]\right.\<br>&amp;+\frac{\alpha}{\beta} \sum_i \mathbb{E}<em>{\hat{\pi}<em>i}\left[\sum</em>{t \geq 1} \gamma^t \sum</em>{a_t^{\prime}}\left(\hat{\pi}<em>i\left(a_t^{\prime} \mid s_t\right)-\hat{\pi}<em>0\left(a_t^{\prime} \mid s_t\right)\right) \nabla</em>{\theta_0} h</em>{\theta_0}\left(a_t^{\prime} \mid s_t\right)\right]<br>\end{aligned}<br>$$</p>
 
                 
             </div>
@@ -423,7 +441,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://meditate.eu.org/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/">http://meditate.eu.org/2022/08/25/ml/lun-wen-yue-du-multi-task-reinforcement-learning-with-soft-modularization/</a>
+                    <a href="http://meditate.eu.org/2022/09/15/ml/lun-wen-yue-du-distral-robust-multitask-reinforcement-learning/">http://meditate.eu.org/2022/09/15/ml/lun-wen-yue-du-distral-robust-multitask-reinforcement-learning/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -636,9 +654,60 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/09/15/ml/lun-wen-yue-du-distral-robust-multitask-reinforcement-learning/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="【论文阅读】Distral Robust Multitask Reinforcement Learning">
+                        
+                        <span class="card-title">【论文阅读】Distral Robust Multitask Reinforcement Learning</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    机器学习
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">多任务学习</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2022/09/10/ml/lun-wen-yue-du-multi-objective-congestion-control/">
                     <div class="card-image">
@@ -656,9 +725,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-09-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-10
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -676,55 +745,6 @@
                     
                     <a href="/tags/%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
                         <span class="chip bg-color">多目标强化学习</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/08/24/ml/lun-wen-yue-du-multi-task-deep-reinforcement-learning-for-continuous-action-control/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control">
-                        
-                        <span class="card-title">【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-24
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
-                                    机器学习
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0/">
-                        <span class="chip bg-color">多任务学习</span>
                     </a>
                     
                 </div>
