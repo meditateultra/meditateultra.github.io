@@ -7,8 +7,11 @@
     <meta name="keywords" content="【论文阅读】Task Switching Network for Multi-task Learning, Meditate">
     <meta name="description" content="这篇论文提出了任务交换网络（TSN），首次使用单编码器-单解码器的结构显著减少了参数量。
 TSN
+
+TSN的总体结构
+
 主干网络是Resnet-18，解码器中每一层会接受上一层中上采样后的特征图拼接上本层的特征图。
-与以往的模型最大的区别在于输出后面只接了一个头">
+与以往的模型">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -394,25 +397,39 @@ TSN
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>这篇论文提出了任务交换网络（TSN），首次使用单编码器-单解码器的结构显著减少了参数量。</p>
-<h1 id="TSN"><a href="#TSN" class="headerlink" title="TSN"></a>TSN</h1><p><img src="http://img.meditate.eu.org/note/image-20220808230903682.png" alt="TSN的总体结构"></p>
+<h1 id="tsn">TSN</h1>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220808230903682.png" alt="" /><figcaption>TSN的总体结构</figcaption>
+</figure>
 <p>主干网络是Resnet-18，解码器中每一层会接受上一层中上采样后的特征图拼接上本层的特征图。</p>
-<p>与以往的模型最大的区别在于输出后面只接了一个头（decoder）。做卷积之后利用这一个头去完成不同的任务。为了区分不同的任务，引入了Task Embedding，为每个任务得到一个$l_{\tau}$向量通过某种方式区分不同的任务。输出通道数的选择也是有讲究的，一般<strong>取所有任务中所需输出的最大的通道数</strong>。这样对于其他的任务，可以沿通道执行平均池化来适应不同的任务。（多说一句，平均池化是没有参数的，所以不会增加额外的参数）</p>
-<h2 id="Task-Embedding-Network"><a href="#Task-Embedding-Network" class="headerlink" title="Task Embedding Network"></a>Task Embedding Network</h2><p>这是一个得到$l_{\tau}$向量的过程。如图中的左下角</p>
-<p>首先，要为每个任务初始化一个d维的条件向量。根据执行的任务的不同，选择任务对应的向量$v_{\tau}$。然后经过一个全连接层，输出一个$l_{\tau}$，仍然为d维。<br>$v_{\tau}$的选择有两种：</p>
-<ol>
+<p>与以往的模型最大的区别在于输出后面只接了一个头（decoder）。做卷积之后利用这一个头去完成不同的任务。为了区分不同的任务，引入了Task Embedding，为每个任务得到一个<span class="math inline">\(l_{\tau}\)</span>向量通过某种方式区分不同的任务。输出通道数的选择也是有讲究的，一般<strong>取所有任务中所需输出的最大的通道数</strong>。这样对于其他的任务，可以沿通道执行平均池化来适应不同的任务。（多说一句，平均池化是没有参数的，所以不会增加额外的参数）</p>
+<h2 id="task-embedding-network">Task Embedding Network</h2>
+<p>这是一个得到<span class="math inline">\(l_{\tau}\)</span>向量的过程。如图中的左下角</p>
+<p>首先，要为每个任务初始化一个d维的条件向量。根据执行的任务的不同，选择任务对应的向量<span class="math inline">\(v_{\tau}\)</span>。然后经过一个全连接层，输出一个<span class="math inline">\(l_{\tau}\)</span>，仍然为d维。 <span class="math inline">\(v_{\tau}\)</span>的选择有两种：</p>
+<ol type="1">
 <li>不同的任务的条件向量是正交</li>
 </ol>
-<p>$$<br>v_{\tau ^1}^Tv_{\tau ^2}=\begin{cases}<br>    \frac{d}{T},&amp;        \tau _1=\tau _2\<br>    0,&amp;        otherwise\<br>\end{cases}<br>$$</p>
-<ol start="2">
-<li>$v_{\tau}$是高斯随机矩阵</li>
+<p><span class="math display">\[
+v_{\tau ^1}^Tv_{\tau ^2}=\begin{cases}
+    \frac{d}{T},&amp;       \tau _1=\tau _2\\
+    0,&amp;     otherwise\\
+\end{cases}
+\]</span></p>
+<ol start="2" type="1">
+<li><span class="math inline">\(v_{\tau}\)</span>是高斯随机矩阵</li>
 </ol>
-<p>$$<br>v_{\tau}\sim N\left( 0_d,\text{diag}\left( 1_d \right) \right)<br>$$</p>
-<h2 id="Conditional-Convolution-Module"><a href="#Conditional-Convolution-Module" class="headerlink" title="Conditional Convolution Module"></a>Conditional Convolution Module</h2><p>也就是A模块，其结构如图中右下角所示</p>
+<p><span class="math display">\[
+v_{\tau}\sim N\left( 0_d,\text{diag}\left( 1_d \right) \right)
+\]</span></p>
+<h2 id="conditional-convolution-module">Conditional Convolution Module</h2>
+<p>也就是A模块，其结构如图中右下角所示</p>
 <p>输入的张量的通道数为c</p>
-<p>上一步中得到的$l_{\tau}$会经过两个全连接层，将d维的向量映射到c维去。这样会分别得到两个向量$\gamma$和$\beta$。</p>
-<p>随后经过AdaIN函数，其中的$\mu$代表均值，$\sigma ^2$代表方差。</p>
-<p>这两个值是通过Instance Normalization（IN）得到的。具体可见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011447962/article/details/117714531?spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;utm_relevant_index=2">https://blog.csdn.net/u011447962/article/details/117714531?spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;utm_relevant_index=2</a></p>
-<p>简单来说就是对于每个通道内部求均值方差。<br>$$<br>AdaIN\left( \hat{x},\beta ,\gamma \right) =\gamma \frac{\left( \hat{x}-\mu \right)}{\sqrt{\sigma ^2}}+\beta<br>$$<br>所以这个式子就是做IN的过程。$\gamma$和$\beta$称为缩放系数和偏移量。</p>
+<p>上一步中得到的<span class="math inline">\(l_{\tau}\)</span>会经过两个全连接层，将d维的向量映射到c维去。这样会分别得到两个向量<span class="math inline">\(\gamma\)</span>和<span class="math inline">\(\beta\)</span>。</p>
+<p>随后经过AdaIN函数，其中的<span class="math inline">\(\mu\)</span>代表均值，<span class="math inline">\(\sigma ^2\)</span>代表方差。</p>
+<p>这两个值是通过Instance Normalization（IN）得到的。具体可见：https://blog.csdn.net/u011447962/article/details/117714531?spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-117714531-blog-125660719.pc_relevant_show_downloadRating&amp;utm_relevant_index=2</p>
+<p>简单来说就是对于每个通道内部求均值方差。 <span class="math display">\[
+AdaIN\left( \hat{x},\beta ,\gamma \right) =\gamma \frac{\left( \hat{x}-\mu \right)}{\sqrt{\sigma ^2}}+\beta
+\]</span> 所以这个式子就是做IN的过程。<span class="math inline">\(\gamma\)</span>和<span class="math inline">\(\beta\)</span>称为缩放系数和偏移量。</p>
 
                 
             </div>

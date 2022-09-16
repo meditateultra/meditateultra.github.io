@@ -6,8 +6,10 @@
     <meta charset="utf-8">
     <meta name="keywords" content="【论文阅读】Multi-Task Deep Reinforcement Learning for Continuous Action Control, Meditate">
     <meta name="description" content="本文基于机器人场景，提出了一种multi-DDPG的算法，将DDPG拓展到了多任务场景，使机器人能够学习多个连续的动作。并且引入mlpconv显著减少了模型参数量，将图像和传感器数据组合为输入。
-MLPConvmlpconv
-一般卷积操作可">
+MLPConv
+mlpconv
+
+m">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -393,16 +395,26 @@ MLPConvmlpconv
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>本文基于机器人场景，提出了一种multi-DDPG的算法，将DDPG拓展到了多任务场景，使机器人能够学习多个连续的动作。并且引入mlpconv显著减少了模型参数量，将图像和传感器数据组合为输入。</p>
-<h1 id="MLPConv"><a href="#MLPConv" class="headerlink" title="MLPConv"></a>MLPConv</h1><h2 id="mlpconv"><a href="#mlpconv" class="headerlink" title="mlpconv"></a>mlpconv</h2><p><img src="http://img.meditate.eu.org/note/20210213230837584.png" alt="mlpconv的结构"></p>
+<h1 id="mlpconv">MLPConv</h1>
+<h2 id="mlpconv-1">mlpconv</h2>
+<figure>
+<img src="http://img.meditate.eu.org/note/20210213230837584.png" alt="" /><figcaption>mlpconv的结构</figcaption>
+</figure>
 <p>一般卷积操作可以看成特征的提取操作，而一般卷积一层只相当于一个线性操作，所以其只能提取出线性特征。所以作者就想能否在卷积层后也加入一个MLP使得每层卷积操作能够提取非线性特征。而为了减少参数量，又用1*1的卷积层模拟了MLP</p>
 <p>一个mlpconv卷积块是1个卷积后加<strong>两个</strong>1*1的卷积，但是每个1*1卷积后面都跟着一个ReLu, 所以可以引入更多的非线性。</p>
-<p>这里的图画的是真的坑，这里的$C_2$指的是1*1卷积核的数量，展开的这一个长条形的向量指的是同一个位置的像素在经过$C_2$个卷积过后的值。中间的类似全连接的部分指的是1*1卷积，因为对同一个像素点施加不同的1*1卷积就类似于全连接的结构。也就是相当于在不同通道之间进行全连接，==而不是把特征图展平。==</p>
-<h2 id="全局平均池化"><a href="#全局平均池化" class="headerlink" title="全局平均池化"></a>全局平均池化</h2><p>mlpconv还提出了全局平均池化的概念。</p>
+<p>这里的图画的是真的坑，这里的<span class="math inline">\(C_2\)</span>指的是1*1卷积核的数量，展开的这一个长条形的向量指的是同一个位置的像素在经过<span class="math inline">\(C_2\)</span>个卷积过后的值。中间的类似全连接的部分指的是1*1卷积，因为对同一个像素点施加不同的1*1卷积就类似于全连接的结构。也就是相当于在不同通道之间进行全连接，==而不是把特征图展平。==</p>
+<h2 id="全局平均池化">全局平均池化</h2>
+<p>mlpconv还提出了全局平均池化的概念。</p>
 <p>Global Average Pooling主要为了解决全连接层参数过多的问题，早期对于分类问题，最后一个卷积层的 Feature Map 通常与全连接层连接，最后通过 <strong>softmax 逻辑回归分类</strong>。全连接层带来的问题就是参数空间过大，容易过拟合</p>
-<p> global average pooling的概念非常简单，分类任务有多少个类别,就控制最终产生多少个feature map，也就是多少通道数。然后对于整个特征图做平均池化。就得到与通道数相等的类别数。</p>
-<h1 id="Multi-DDPG"><a href="#Multi-DDPG" class="headerlink" title="Multi-DDPG"></a>Multi-DDPG</h1><p><img src="http://img.meditate.eu.org/note/image-20220824144142878.png" alt="multi-DDPG结构"></p>
+<p>global average pooling的概念非常简单，分类任务有多少个类别,就控制最终产生多少个feature map，也就是多少通道数。然后对于整个特征图做平均池化。就得到与通道数相等的类别数。</p>
+<h1 id="multi-ddpg">Multi-DDPG</h1>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220824144142878.png" alt="" /><figcaption>multi-DDPG结构</figcaption>
+</figure>
 <p>multi-DDPG是多Actor，单Critic的结构。也就意味着一个Critic要对所有的Actor打分。在Critic模型中，最后一个全连接层是非共享的，前面的部分都是对个Actor共享的。</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220824144310836.png" alt="multi-DDPG算法流程"></p>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220824144310836.png" alt="" /><figcaption>multi-DDPG算法流程</figcaption>
+</figure>
 
                 
             </div>
