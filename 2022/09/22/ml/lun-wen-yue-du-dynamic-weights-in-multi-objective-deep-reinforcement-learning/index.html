@@ -4,8 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="数据中心网络综述, Meditate">
-    <meta name="description" content="目前常用的数据中心网络拓扑是多根树架构。该拓扑分为三层，从下到上分别为==接入层、汇聚层和核心层==，规模较小的数据中心可以只有接入层和汇聚层。接入层交换机将服务器连接起来。为了提高可用性，一台服务器可能连接到两台接入交换机。同样，接入交换">
+    <meta name="keywords" content="【论文阅读】Dynamic Weights in Multi-Objective Deep Reinforcement Learning, Meditate">
+    <meta name="description" content="本文研究了权重变化的多目标强化学习方式。
+==主要贡献：==
+
+提出了一种能够适应动态权重变化的多目标Q-Learning方式（CN）。
+提出了多样化经验化回放缓存（DER）保存多样化的经验，使模型能够从过去的不同的权重的经验中获取对当前权">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -28,7 +32,7 @@
     </style>
 
 
-    <title>数据中心网络综述 | Meditate</title>
+    <title>【论文阅读】Dynamic Weights in Multi-Objective Deep Reinforcement Learning | Meditate</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -215,12 +219,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">数据中心网络综述</h1>
+                    <h1 class="description center-align post-title">【论文阅读】Dynamic Weights in Multi-Objective Deep Reinforcement Learning</h1>
                 </div>
             </div>
         </div>
@@ -336,8 +340,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%BD%91%E7%BB%9C/">
-                                <span class="chip bg-color">数据中心网络</span>
+                            <a href="/tags/%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">多目标强化学习</span>
                             </a>
                         
                     </div>
@@ -348,8 +352,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/" class="post-category">
-                                云计算
+                            <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                机器学习
                             </a>
                         
                     </div>
@@ -361,7 +365,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-20
+                    2022-09-22
                 </div>
                 
 
@@ -390,35 +394,69 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>目前常用的数据中心网络拓扑是多根树架构。该拓扑分为三层，从下到上分别为==接入层、汇聚层和核心层==，规模较小的数据中心可以只有接入层和汇聚层。接入层交换机将服务器连接起来。为了提高可用性，一台服务器可能连接到两台接入交换机。同样，接入交换机一般连接到两台汇聚层交换机。最后，汇聚交换机同时连接到多台核心层交换机。绝大部分数据中心网络通常会有一定的带宽收敛比(Oversubscription)。所谓带宽收敛比，是指在最坏情况下服务器两两之间通信需要的最大带宽和数据中心网络拓扑可以提供的带宽的比值。带宽收敛比为1：1表示所有的服务器都能以其网卡速率进行两两之间通信。通常，为了降低成本，数据中心网络都会有收敛比，一般为2.5：1到8：1。</p>
-<p><img src="http://img.meditate.eu.org/note/image-20220917232623597.png" alt="数据中心网络常用拓扑图"></p>
-<h1 id="数据中心的定义"><a href="#数据中心的定义" class="headerlink" title="数据中心的定义"></a>数据中心的定义</h1><p>随着数据中心的发展，尤其是云计算技术的出现，数据中心已经不只是一个简单的服务器统一托管、维护的场所，它已经衍变成一个集大数据量运算和存储为一体的高性能计算机的集中地。各T厂商将之前以单台为单位的服务器通过各种方式变成多台为群体的模式，在此基础上开发诸如虚拟化、云计算、云存储等一系列的功能，以提高单位数量内服务器的使用效率。目前，新一代数据中心(又称云计算数据中心、集装箱式数据中心或者绿色数据中心)的概念仍没有个标准定义。普遍认为新一代数据中心（朱伟雄，2009）是：基于标准构建模块，通过模块化软件实现自动化7×24小时无人值守计算与管理，并以供应链方式提供共享的基础设施、信息与应用等T服务。</p>
-<h1 id="数据中心网络的研究问题"><a href="#数据中心网络的研究问题" class="headerlink" title="数据中心网络的研究问题"></a>数据中心网络的研究问题</h1><ul>
-<li><p>DCN的架构及其拓扑</p>
-</li>
-<li><p>能源效率问题。如何保持 DCN 功率预算可管理，包括虚拟化、网络负载管理和调度</p>
-</li>
-<li>DCN 中的拥塞处理，包括拥塞通知和避免</li>
-<li>DCN 中的路由，并提供高效且具有成本效益的路由机制</li>
-</ul>
-<p>······</p>
-<p>去了解了一下数据中心和数据中心网络，了解了几个基本的网络架构。感觉数据中心和数据中心网络中可以研究的问题很多，但是适合用AI做的并不是很多。我主要总结了几个。</p>
-<h1 id="适合用AI做的问题"><a href="#适合用AI做的问题" class="headerlink" title="适合用AI做的问题"></a>适合用AI做的问题</h1><h2 id="负载平衡"><a href="#负载平衡" class="headerlink" title="负载平衡"></a>负载平衡</h2><p>负载平衡实际上就是选择路径并调度流的过程，可以用AI来调度各条路上的流，以一些指标为目标，比如吞吐量和延迟等。</p>
-<h3 id="负载平衡的定义"><a href="#负载平衡的定义" class="headerlink" title="负载平衡的定义"></a>负载平衡的定义</h3><p><strong>负载平衡相当于最小化链路的最大利用率。</strong>$s,d$代表了流的起点和终点，$u,v$代表了以$s,d$为起点终点的图中某条边的两个交换机。$c_{u,v}$代表了链路的最大容量。</p>
+                <p>本文研究了权重变化的多目标强化学习方式。</p>
+<p>==主要贡献：==</p>
+<ol>
+<li>提出了一种能够适应动态权重变化的多目标Q-Learning方式（<strong>CN</strong>）。</li>
+<li>提出了多样化经验化回放缓存（<strong>DER</strong>）保存多样化的经验，使模型能够从过去的不同的权重的经验中获取对当前权重设置有益的经验，实验证明DER对于动态权重变化的强化学习方式提升很大。</li>
+<li>为多目标强化学习提出了一个新的benchmark-矿车（<strong>Minecart</strong>）。</li>
+</ol>
+<p>这篇文章的多目标采用线性标量函数的方式实现。</p>
+<h1 id="Conditioned-Network（CN）"><a href="#Conditioned-Network（CN）" class="headerlink" title="Conditioned Network（CN）"></a>Conditioned Network（CN）</h1><h2 id="CN的模型结构"><a href="#CN的模型结构" class="headerlink" title="CN的模型结构"></a>CN的模型结构</h2><p><img src="http://img.meditate.eu.org/note/image-20220922103848512.png" alt="CN的模型结构"></p>
+<p>采用的Dueling Q Network（具体见蘑菇书），输入有两个值：</p>
+<p>state：由于CN是端到端的，输入的是一张图像，经过特征提取后变成一个state向量输入。</p>
+<p>weight：各个目标的权重向量</p>
+<h2 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h2><p>我们希望CN能够适应动态的权重变化，所以在一味地在当前的权重向量（active weight vector）上训练是不行的。我们希望CN在拟合当前weight的基础上不遗忘过去的weight。所以样本一次应该在多个权重向量上进行训练。</p>
+<p>文章中的做法就是在当前的权重向量$w<em>t$和一个随机的先前遇到的权重向量$w_j$上平均地求损失。$Q</em>{CN}^{-}$是target net，CN采用Double Q-Learning的方式。</p>
 <script type="math/tex; mode=display">
-min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="负载平衡的目标"><a href="#负载平衡的目标" class="headerlink" title="负载平衡的目标"></a>负载平衡的目标</h3><p>由于数据中心中的应用程序有其特定的需求，负载平衡算法应考虑到这一点，有时需要在不同需求之间进行权衡。负载平衡算法的四个主要目标：==高性能、可扩展性、鲁棒性和能量效率。==这是主要的目标，实际上还会有其他目标。比如各个包的到达的最晚时间。</p>
-<ul>
-<li>高性能：负载均衡算法需要根据应用需求考虑的两个主要需求吞吐量和延迟。</li>
-<li>可扩展性：（1）负载均衡算法是否适用大规模的数据中心网络，并且部署成本是不是高；（2）负载均衡算法是否适用不同的拓扑结构和运行不同应用程序的数据中心环境</li>
-<li>鲁棒性：负载平衡算法如何应对数据中心的故障和拓扑变化是一个关键问题。</li>
-<li>能量效率：负载平衡算法必须考虑能量消耗，并满足用最小设备子集来满足应用要求</li>
-</ul>
-<h3 id="负载平衡算法的两个过程"><a href="#负载平衡算法的两个过程" class="headerlink" title="负载平衡算法的两个过程"></a>负载平衡算法的两个过程</h3><p>数据中心网络负载平衡机制的设计分解为两个主要过程：==收集拥塞信息和选择路径。==负载平衡机制的一个关键过程是选择一个或多个适当的度量来表示拥塞，并将拥塞信息传输给将做出负载平衡决策的实体。在获得数据中心网络的拥塞信息后，负载平衡方案需要调度不同路径上的到达流以平衡负载。</p>
-<h2 id="服务器负载平衡"><a href="#服务器负载平衡" class="headerlink" title="服务器负载平衡"></a>服务器负载平衡</h2><p>服务器负载平衡机制旨在平衡服务器之间的流量。根据服务器的负载和应用程序的需求将请求分发到不同的服务器。这就涉及到服务器的选择调度问题。</p>
-<h2 id="虚拟化"><a href="#虚拟化" class="headerlink" title="虚拟化"></a>虚拟化</h2><p>虚拟化技术用于虚拟化物理机并为多个用户提供虚拟机。因此，提供商可以建立云数据中心，在相同硬件资源的基础上为多个用户提供服务。具体来说，每个租户都有一个拥有客户资源的私有网络，物理链路的带宽根据租户的需求进行分配。</p>
-<p>这也带来了物理链路带宽分配的问题，而且可能是同一条物理链路的分配问题。比如不同用户的优先级可能不同，由于不同的租户支付不同的钱，他们的优先级也不同。一般来说，当租户对同一瓶颈环节的需求冲突时，应该保证优先级较高的租户的需求。来自不同租户和各种应用程序类型的需求不同，例如网络搜索、广告、数据分析。因此调度策略也可以不一样。</p>
-<h2 id="能耗"><a href="#能耗" class="headerlink" title="能耗"></a>能耗</h2><p>一般能耗是通过架构创新，虚拟化或者调度来降低的。能耗一般作为一个调度目标，采用合适的负载平衡算法，然后可以关闭一些空闲服务器。</p>
-<p>感觉AI还是比较适合在调度里面用，尤其是网络问题里面去用。然后我看老师发我的文章很多，而且都是比较具体的云计算里面的一些算法。我理解的意思是不是去这些文章中参考一下他们的应用场景，然后尝试把MTRL，MORL套过去。</p>
+\begin{aligned}
+&\frac{1}{2}\left[\left|\mathbf{y}_{\mathbf{w}_t}^{(j)}-\mathbf{Q}_{C N}\left(a_j, s_j ; \mathbf{w}_t\right)\right|+\left|\mathbf{y}_{\mathbf{w}_j}^{(j)}-\mathbf{Q}_{C N}\left(a_j, s_j ; \mathbf{w}_j\right)\right|\right] \\
+&\mathbf{y}_{\mathbf{w}}^{(j)}=\mathbf{r}_j+\gamma \mathbf{Q}_{C N}^{-}\left(\underset{a \in A}{\operatorname{argmax}} \mathbf{Q}_{C N}\left(a, s_{j+1} ; \mathbf{w}\right) \cdot \mathbf{w}, s_{j+1} ; \mathbf{w}\right)
+\end{aligned}</script><h2 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h2><p><img src="http://img.meditate.eu.org/note/image-20220922110239464.png" alt="CN算法步骤"></p>
+<p>整体就是一个典型的Q-Learning过程，这里要维护两个Buffer，$W$存储过去的权重向量 ，$D$存储经验。</p>
+<p>$getWeightVector()$这个函数用来获取active weight即$w_t$，在后续实验中提到了两种不一样的生成方式。</p>
+<h1 id="Diverse-Experience-Replay（DER）"><a href="#Diverse-Experience-Replay（DER）" class="headerlink" title="Diverse Experience Replay（DER）"></a>Diverse Experience Replay（DER）</h1><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>以前的Q-Learning包括上面的CN都是选择维护了一个先进先出的缓存，粗暴地存储了最近的以往的经验。但是文章中说了，<strong>一个以往的weight的经验可能对于当前的weight的训练是有害的。</strong>==我们希望在缓存中保存那些对于当前weight训练有益的经验（有益的经验就是指与当前weight尽可能相关的经验）。==因为weight变化是随机的，那么在我们不知道未来会采用什么样的weight前提下，==我们希望使缓冲区中经验尽可能的多样化（diverse）。==这样在当前weight（active weight）训练时随机选就有可能选到对自己训练有益的经验。</p>
+<p>比较容易想到的就是增大缓冲区，但是这是不可行的。文章列出了两点理由：</p>
+<ol>
+<li>除非回放缓冲区是无限的，否则在到达需要它们的权重空间区域之前，仍然需要擦除旧的经验。</li>
+<li>即使这些相关经验仍然存在，由于总数过多，我们比较难以选到这些经验。</li>
+</ol>
+<p>所以文章提出了DER。</p>
+<h2 id="DER"><a href="#DER" class="headerlink" title="DER"></a>DER</h2><p>DER将<strong>trajectory</strong>（一段完整的状态-动作序列）作为原子单位处理，这样做是为了便于获取从终止状态到初始状态间的完整的Q值。</p>
+<p>使用签名函数$s$为每个trajectory计算一个签名（signature），当考虑将trajectory添加入Buffer时，多样性函数$d$根据签名计算每个trajectory的与buffer中其他trajectory的相对多样性。如果新trajectory的加入增加了缓冲区的整体多样性，则仅将新trajectory添加到多样化缓冲区中。当它已满时，对多样性贡献最小的trajectory将从多样性缓冲区中弹出。</p>
+<h2 id="在动态权重中使用DER"><a href="#在动态权重中使用DER" class="headerlink" title="在动态权重中使用DER"></a>在动态权重中使用DER</h2><ol>
+<li>每个回合的转换被视作一条trajectory</li>
+<li>签名函数$s\left( \tau \right) =\sum_{t=0}^{\left| \tau \right|}{\gamma ^tr_t}$</li>
+<li>使用crowding distance算法作为多样性度量（算法没去看）</li>
+</ol>
+<p>在动态权重中，也保留了一个FIFO的buffer，只有当FIFO buffer满了时才会将最老的trajectory尝试加入DER。</p>
+<p>在训练时会现在DER中采样训练，然后在FIFO buffer中进一步训练。</p>
+<h1 id="新的Benchmark-Minecart"><a href="#新的Benchmark-Minecart" class="headerlink" title="新的Benchmark-Minecart"></a>新的Benchmark-Minecart</h1><p>简略写一下，详见论文。</p>
+<p><img src="http://img.meditate.eu.org/note/image-20220922143111247.png" alt="Minecraft的表述图"></p>
+<p>b代表矿车，c~g代表不同的矿坑，每回合里面会随机生成不同的矿石。a代表矿石出售点。</p>
+<p>reward vector包含$N$维前$N-1$维代表矿石的数量，第$N$维代表燃料消耗。</p>
+<h1 id="以往的算法用在动态权重下"><a href="#以往的算法用在动态权重下" class="headerlink" title="以往的算法用在动态权重下"></a>以往的算法用在动态权重下</h1><p>为了实验中方便比较以往的多目标算法，文章还调整传统的MORL以适应动态权重。</p>
+<h2 id="UVFA"><a href="#UVFA" class="headerlink" title="UVFA"></a>UVFA</h2><p>没看过这个算法，先pass</p>
+<h2 id="Multi-Network（MN）"><a href="#Multi-Network（MN）" class="headerlink" title="Multi-Network（MN）"></a>Multi-Network（MN）</h2><p>实际上这种方式非常的暴力，就是将传统的标量化DQN在多个不同的weight上训练，将不同weight下的最优策略存储进一个Buffer中$\Pi $。这里的$\Pi$不会太大，因为它是CSS的子集（CSS就是在任意weight下最优策略的集合）。而CSS不会太大。这一点在Minecraft中有说明过，下图的一个区域代表这一区域中最优策略是一致的。实际上也就是只有7块。</p>
+<p><img src="http://img.meditate.eu.org/note/image-20220922152430758.png" alt="Minecraft下不同weight的最优策略区域"></p>
+<p><strong>替换规则：</strong></p>
+<p>对于当前的$w$训练得到一个最优的$\pi_w$，如果$V^{\pi_w}$对于至少一个过去的权重向量或当前的权重向量 w 改进了$\Pi$中的策略的最大标量值，则将其保存。数学语言表示更加清晰：</p>
+<script type="math/tex; mode=display">
+\exists w\in W,\ V^{\pi _t}\cdot w>\max _{V'\in \Pi}V'\cdot w-\kappa</script><p>此时，将$\pi_w$加入$\Pi$。所有被 $\pi_w$ 冗余的旧策略都从$\Pi$中删除。如果$\pi_w$对于任何遇到的权重向量都不是最佳策略，那么它自己就是冗余的。</p>
+<p><strong>训练新的weight：</strong></p>
+<p>当训练一个新$w$时，会从$\Pi$中选一个$\pi’$使得$V^{\pi’}\cdot\pi’$最大。在$\pi’$的基础上训练，这样训练起来比较快。</p>
+<p>MN有一个很大的缺点，因为MN 基于预测的 Q 值比较策略，所以不准确的输出会通过使 MN 偏向于高估的策略来干扰训练。因此，MN 需要对每个权重向量进行长时间的训练才能获得准确的值进行比较。==可想而知MN是比较慢的。==</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p><strong>评判指标：</strong></p>
+<p>最优策略的价值与实际reward之间的差值：$\varDelta= V<em>{w}^*\cdot w-\sum</em>{t=0}^T{\gamma^{t}r_t\cdot w}$，$V_w^*$代表$w$下的最优策略的value。$\varDelta$显然是越小越好。</p>
+<p>文章讨论了两种不同的$w$的生成方式：</p>
+<ol>
+<li>稀疏情况：从Dirichlet分布 ($\alpha=1$) 中随机采样的，对于Minecart，每 50k步采样一次，对于 DST，每 5k步采样一次。</li>
+<li>固定的变化：$w$在10个回合内线性地变化到$w’$</li>
+</ol>
+<p><img src="http://img.meditate.eu.org/note/image-20220922154243467.png" alt="在Minecraft上的实验结果"></p>
+<p>MO：单个多目标 DQN 通过标量化Q-Learning仅在当前 w 上持续训练（不维护多个网络）。</p>
+<p>CN：CN与UVFA相结合</p>
+<p>CN-ACTIVE：CN仅在当前的w上训练。</p>
 
                 
             </div>
@@ -445,7 +483,7 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://meditate.eu.org/2022/09/20/ml/shu-ju-zhong-xin-wang-luo-zong-shu/">http://meditate.eu.org/2022/09/20/ml/shu-ju-zhong-xin-wang-luo-zong-shu/</a>
+                    <a href="http://meditate.eu.org/2022/09/22/ml/lun-wen-yue-du-dynamic-weights-in-multi-objective-deep-reinforcement-learning/">http://meditate.eu.org/2022/09/22/ml/lun-wen-yue-du-dynamic-weights-in-multi-objective-deep-reinforcement-learning/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -483,8 +521,8 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%BD%91%E7%BB%9C/">
-                                    <span class="chip bg-color">数据中心网络</span>
+                                <a href="/tags/%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">多目标强化学习</span>
                                 </a>
                             
                         </div>
@@ -658,9 +696,10 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/09/22/ml/lun-wen-yue-du-dynamic-weights-in-multi-objective-deep-reinforcement-learning/">
                     <div class="card-image">
@@ -678,9 +717,9 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-09-22
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-22
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -693,6 +732,7 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -711,13 +751,13 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/09/17/ml/lun-wen-yue-du-load-balancing-in-data-center-networks-a-survey/">
+                <a href="/2022/09/20/ml/shu-ju-zhong-xin-wang-luo-zong-shu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="【论文阅读】Load Balancing in Data Center Networks A Survey">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="数据中心网络综述">
                         
-                        <span class="card-title">【论文阅读】Load Balancing in Data Center Networks A Survey</span>
+                        <span class="card-title">数据中心网络综述</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -728,7 +768,7 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-17
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-20
                             </span>
                         <span class="publish-author">
                             
@@ -747,10 +787,6 @@ min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h3 id="�
                     
                     <a href="/tags/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%BD%91%E7%BB%9C/">
                         <span class="chip bg-color">数据中心网络</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1/">
-                        <span class="chip bg-color">负载平衡</span>
                     </a>
                     
                 </div>
