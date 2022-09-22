@@ -463,7 +463,8 @@
 <p><strong>替换规则：</strong></p>
 <p>对于当前的<span class="math inline">\(w\)</span>训练得到一个最优的<span class="math inline">\(\pi_w\)</span>，如果<span class="math inline">\(V^{\pi_w}\)</span>对于至少一个过去的权重向量或当前的权重向量 w 改进了<span class="math inline">\(\Pi\)</span>中的策略的最大标量值，则将其保存。数学语言表示更加清晰： <span class="math display">\[
 \exists w\in W,\ V^{\pi _t}\cdot w&gt;\max _{V&#39;\in \Pi}V&#39;\cdot w-\kappa
-\]</span> 此时，将<span class="math inline">\(\pi_w\)</span>加入<span class="math inline">\(\Pi\)</span>。所有被 <span class="math inline">\(\pi_w\)</span> 冗余的旧策略都从<span class="math inline">\(\Pi\)</span>中删除。如果<span class="math inline">\(\pi_w\)</span>对于任何遇到的权重向量都不是最佳策略，那么它自己就是冗余的。</p>
+\]</span> 其中，<span class="math inline">\(\kappa\)</span>是一个常数，是为了解决近似误差问题。当两个标量化值在彼此的误差 κ 内时，较新的策略更受青睐。</p>
+<p>此时，将<span class="math inline">\(\pi_w\)</span>加入<span class="math inline">\(\Pi\)</span>。所有被 <span class="math inline">\(\pi_w\)</span> 冗余的旧策略都从<span class="math inline">\(\Pi\)</span>中删除。如果<span class="math inline">\(\pi_w\)</span>对于任何遇到的权重向量都不是最佳策略，那么它自己就是冗余的。</p>
 <p><strong>训练新的weight：</strong></p>
 <p>当训练一个新<span class="math inline">\(w\)</span>时，会从<span class="math inline">\(\Pi\)</span>中选一个<span class="math inline">\(\pi&#39;\)</span>使得<span class="math inline">\(V^{\pi&#39;}\cdot\pi&#39;\)</span>最大。在<span class="math inline">\(\pi&#39;\)</span>的基础上训练，这样训练起来比较快。</p>
 <p>MN有一个很大的缺点，因为MN 基于预测的 Q 值比较策略，所以不准确的输出会通过使 MN 偏向于高估的策略来干扰训练。因此，MN 需要对每个权重向量进行长时间的训练才能获得准确的值进行比较。==可想而知MN是比较慢的。==</p>
