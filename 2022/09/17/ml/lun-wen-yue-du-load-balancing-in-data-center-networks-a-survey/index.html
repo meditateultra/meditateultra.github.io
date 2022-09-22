@@ -5,10 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="【论文阅读】Load Balancing in Data Center Networks A Survey, Meditate">
-    <meta name="description" content="数据中心网络的架构==架构可分为以交换机为中心、以服务器为中心和混合结构。==
+    <meta name="description" content="数据中心网络的架构
+==架构可分为以交换机为中心、以服务器为中心和混合结构。==
 
 在以交换机为中心的架构中，交换机用于在服务器之间提供多条路径并执行数据包转发。
-在以服务器为中心的体系结构中，服务器既执行计算功能，又充当连接到其他服务器的交">
+在以服务器为中心的体系结构中，服务器既执行计算功能，又充当连接到其他">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -397,55 +398,91 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="数据中心网络的架构"><a href="#数据中心网络的架构" class="headerlink" title="数据中心网络的架构"></a>数据中心网络的架构</h1><p>==架构可分为以交换机为中心、以服务器为中心和混合结构。==</p>
+                <h1 id="数据中心网络的架构">数据中心网络的架构</h1>
+<p>==架构可分为以交换机为中心、以服务器为中心和混合结构。==</p>
 <ul>
 <li>在以交换机为中心的架构中，交换机用于在服务器之间提供多条路径并执行数据包转发。</li>
-<li>在以服务器为中心的体系结构中，服务器既执行计算功能，又充当连接到其他服务器的交换机。 </li>
-<li>在混合结构中，使用交换机和服务器来执行数据包转发，通常在服务器之间提供长度不等的多条路径。 </li>
+<li>在以服务器为中心的体系结构中，服务器既执行计算功能，又充当连接到其他服务器的交换机。</li>
+<li>在混合结构中，使用交换机和服务器来执行数据包转发，通常在服务器之间提供长度不等的多条路径。</li>
 </ul>
-<h2 id="以交换机为中心的架构"><a href="#以交换机为中心的架构" class="headerlink" title="以交换机为中心的架构"></a>以交换机为中心的架构</h2><h3 id="Fat-Tree"><a href="#Fat-Tree" class="headerlink" title="Fat-Tree"></a>Fat-Tree</h3><p><img src="http://img.meditate.eu.org/note/image-20220918112218519.png" alt="k=4的Fat-Tree"></p>
-<p>$k$代表pod的数量</p>
-<h3 id="VL2"><a href="#VL2" class="headerlink" title="VL2"></a>VL2</h3><p><img src="http://img.meditate.eu.org/note/image-20220918112402708.png" alt="n0=2,n1=4,n2=4的VL2"></p>
-<p>边缘交换机有$n_0$个10GbE端口和$10n_0$个1GbE端口，聚合交换机有$n_1$个10GbB端口，核心交换机有$n_2$个10GbE端口。 </p>
+<h2 id="以交换机为中心的架构">以交换机为中心的架构</h2>
+<h3 id="fat-tree">Fat-Tree</h3>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918112218519.png" alt="" /><figcaption>k=4的Fat-Tree</figcaption>
+</figure>
+<p><span class="math inline">\(k\)</span>代表pod的数量</p>
+<h3 id="vl2">VL2</h3>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918112402708.png" alt="" /><figcaption>n0=2,n1=4,n2=4的VL2</figcaption>
+</figure>
+<p>边缘交换机有<span class="math inline">\(n_0\)</span>个10GbE端口和<span class="math inline">\(10n_0\)</span>个1GbE端口，聚合交换机有<span class="math inline">\(n_1\)</span>个10GbB端口，核心交换机有<span class="math inline">\(n_2\)</span>个10GbE端口。</p>
 <p>GbE端口：千兆以太网端口</p>
-<h2 id="以服务器为中心的架构"><a href="#以服务器为中心的架构" class="headerlink" title="以服务器为中心的架构"></a>以服务器为中心的架构</h2><h3 id="CamCube"><a href="#CamCube" class="headerlink" title="CamCube"></a>CamCube</h3><p><img src="http://img.meditate.eu.org/note/image-20220918113234243.png" alt="27个服务器的CamCube架构"></p>
+<h2 id="以服务器为中心的架构">以服务器为中心的架构</h2>
+<h3 id="camcube">CamCube</h3>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918113234243.png" alt="" /><figcaption>27个服务器的CamCube架构</figcaption>
+</figure>
 <p>上图是一个具有27个服务器的CamCube架构。它还提出了一个基于密钥的网络堆栈，以便通过CamCube应用程序接口（API）更好地利用3D Torus架构的容量。以服务器为中心的架构可以显著降低交换机和路由器的成本。由于服务器比交换机需要更少的冷却成本，因此它也是节能的。CamCube的主要缺点在于，对于非基于密钥的应用程序，路径可能变得相当长，路由复杂度可能很高。</p>
-<h2 id="混合架构"><a href="#混合架构" class="headerlink" title="混合架构"></a>混合架构</h2><h3 id="BCube"><a href="#BCube" class="headerlink" title="BCube"></a>BCube</h3><p><img src="http://img.meditate.eu.org/note/image-20220918114249540.png" alt="n=4的BCube的架构"></p>
+<h2 id="混合架构">混合架构</h2>
+<h3 id="bcube">BCube</h3>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918114249540.png" alt="" /><figcaption>n=4的BCube的架构</figcaption>
+</figure>
 <p>用交换机和具有多个端口的服务器作为转发设备。矩形代表交换机，圆形代表服务器。</p>
-<p><strong>它可以递归定义。$BCube_0$由连接到n端口交换机的$n$个服务器组成。$BCube_1$由n个$BCube_0$和$n$个$n$端口交换机组成。</strong>递归地，$BCube<em>k（k≥ 1）$ 包含$n$个$BCube</em>{k−1}$和$n^k$的$n$端口交换机。总共有$n^{k+1}$台服务器，具有$k+1$个端口和$k+1$个交换机</p>
-<p>然后连接第$j$个$BCube_{k-1}$中第$i$个服务器的第$k$个端口到第$i$个$\text{Level}\ k$交换机的第$j$个端口。</p>
-<h3 id="DCell"><a href="#DCell" class="headerlink" title="DCell"></a>DCell</h3><p><img src="http://img.meditate.eu.org/note/image-20220918115800292.png" alt="n=4的DCell1结构"></p>
-<p>DCell也可以递归定义，$DCell_0$由n个服务器和一个小型交换机构成。每个服务器通过1GbE或10GbE链路连接到小型交换机。在DCell的原型中，$n$是一个小整数（通常为） $n\le 8$因此，一个普通的8端口交换机对于该体系结构来说就足够了。</p>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="数据中心网络的特点"><a href="#数据中心网络的特点" class="headerlink" title="数据中心网络的特点"></a>数据中心网络的特点</h2><ul>
+<p><strong>它可以递归定义。<span class="math inline">\(BCube_0\)</span>由连接到n端口交换机的<span class="math inline">\(n\)</span>个服务器组成。<span class="math inline">\(BCube_1\)</span>由n个<span class="math inline">\(BCube_0\)</span>和<span class="math inline">\(n\)</span>个<span class="math inline">\(n\)</span>端口交换机组成。</strong>递归地，<span class="math inline">\(BCube_k（k≥ 1）\)</span> 包含<span class="math inline">\(n\)</span>个<span class="math inline">\(BCube_{k−1}\)</span>和<span class="math inline">\(n^k\)</span>的<span class="math inline">\(n\)</span>端口交换机。总共有<span class="math inline">\(n^{k+1}\)</span>台服务器，具有<span class="math inline">\(k+1\)</span>个端口和<span class="math inline">\(k+1\)</span>个交换机</p>
+<p>然后连接第<span class="math inline">\(j\)</span>个<span class="math inline">\(BCube_{k-1}\)</span>中第<span class="math inline">\(i\)</span>个服务器的第<span class="math inline">\(k\)</span>个端口到第<span class="math inline">\(i\)</span>个<span class="math inline">\(\text{Level}\ k\)</span>交换机的第<span class="math inline">\(j\)</span>个端口。</p>
+<h3 id="dcell">DCell</h3>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918115800292.png" alt="" /><figcaption>n=4的DCell1结构</figcaption>
+</figure>
+<p>DCell也可以递归定义，<span class="math inline">\(DCell_0\)</span>由n个服务器和一个小型交换机构成。每个服务器通过1GbE或10GbE链路连接到小型交换机。在DCell的原型中，<span class="math inline">\(n\)</span>是一个小整数（通常为） <span class="math inline">\(n\le 8\)</span>因此，一个普通的8端口交换机对于该体系结构来说就足够了。</p>
+<h1 id="背景">背景</h1>
+<h2 id="数据中心网络的特点">数据中心网络的特点</h2>
+<ul>
 <li>以小流量为主，缺乏可预测性</li>
 <li>核心层的链路利用率高，丢包率与利用率没有直接关系。数据中心网络中的丢包主要是由流量突发引起的</li>
 </ul>
-<h2 id="链路负载平衡和服务器负载平衡的区别"><a href="#链路负载平衡和服务器负载平衡的区别" class="headerlink" title="链路负载平衡和服务器负载平衡的区别"></a>链路负载平衡和服务器负载平衡的区别</h2><p>服务器负载平衡主要是根据服务器的负载和内容将请求分发到不同的服务器，链路负载平衡是要平衡链路中的流量防止网络拥塞。==本文介绍的链路负载平衡。==</p>
-<h1 id="负载平衡"><a href="#负载平衡" class="headerlink" title="负载平衡"></a>负载平衡</h1><h2 id="负载平衡的定义"><a href="#负载平衡的定义" class="headerlink" title="负载平衡的定义"></a>负载平衡的定义</h2><p><strong>负载平衡相当于最小化链路的最大利用率。</strong>$s,d$代表了流的起点和终点，$u,v$代表了以$s,d$为起点终点的图中某条边的两个交换机。$c_{u,v}$代表了链路的最大容量。</p>
-<script type="math/tex; mode=display">
-min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}</script><h2 id="负载平衡的目标"><a href="#负载平衡的目标" class="headerlink" title="负载平衡的目标"></a>负载平衡的目标</h2><p>由于数据中心中的应用程序有其特定的需求，负载平衡算法应考虑到这一点，有时需要在不同需求之间进行权衡。负载平衡算法的四个主要目标：==高性能、可扩展性、鲁棒性和能量效率。==这是主要的目标，实际上还会有其他目标。比如各个包的到达的最晚时间。</p>
+<h2 id="链路负载平衡和服务器负载平衡的区别">链路负载平衡和服务器负载平衡的区别</h2>
+<p>服务器负载平衡主要是根据服务器的负载和内容将请求分发到不同的服务器，链路负载平衡是要平衡链路中的流量防止网络拥塞。==本文介绍的链路负载平衡。==</p>
+<h1 id="负载平衡">负载平衡</h1>
+<h2 id="负载平衡的定义">负载平衡的定义</h2>
+<p><strong>负载平衡相当于最小化链路的最大利用率。</strong><span class="math inline">\(s,d\)</span>代表了流的起点和终点，<span class="math inline">\(u,v\)</span>代表了以<span class="math inline">\(s,d\)</span>为起点终点的图中某条边的两个交换机。<span class="math inline">\(c_{u,v}\)</span>代表了链路的最大容量。 <span class="math display">\[
+min\,\,max_{u,v\in E}\frac{\sum_{s,d}{f_{u,v}^{s,d}}}{c_{u,v}}
+\]</span></p>
+<h2 id="负载平衡的目标">负载平衡的目标</h2>
+<p>由于数据中心中的应用程序有其特定的需求，负载平衡算法应考虑到这一点，有时需要在不同需求之间进行权衡。负载平衡算法的四个主要目标：==高性能、可扩展性、鲁棒性和能量效率。==这是主要的目标，实际上还会有其他目标。比如各个包的到达的最晚时间。</p>
 <ul>
 <li>高性能：负载均衡算法需要根据应用需求考虑的两个主要需求吞吐量和延迟。</li>
 <li>可扩展性：（1）负载均衡算法是否适用大规模的数据中心网络，并且部署成本是不是高；（2）负载均衡算法是否适用不同的拓扑结构和运行不同应用程序的数据中心环境</li>
 <li>鲁棒性：负载平衡算法如何应对数据中心的故障和拓扑变化是一个关键问题。</li>
 <li>能量效率：负载平衡算法必须考虑能量消耗，并满足用最小设备子集来满足应用要求</li>
 </ul>
-<h1 id="负载平衡算法的两个过程"><a href="#负载平衡算法的两个过程" class="headerlink" title="负载平衡算法的两个过程"></a>负载平衡算法的两个过程</h1><p>数据中心网络负载平衡机制的设计分解为两个主要过程：==收集拥塞信息和选择路径。==负载平衡机制的一个关键过程是选择一个或多个适当的度量来表示拥塞，并将拥塞信息传输给将做出负载平衡决策的实体。在获得数据中心网络的拥塞信息后，负载平衡方案需要调度不同路径上的到达流以平衡负载。</p>
-<h2 id="拥塞度量方法"><a href="#拥塞度量方法" class="headerlink" title="拥塞度量方法"></a>拥塞度量方法</h2><ul>
+<h1 id="负载平衡算法的两个过程">负载平衡算法的两个过程</h1>
+<p>数据中心网络负载平衡机制的设计分解为两个主要过程：==收集拥塞信息和选择路径。==负载平衡机制的一个关键过程是选择一个或多个适当的度量来表示拥塞，并将拥塞信息传输给将做出负载平衡决策的实体。在获得数据中心网络的拥塞信息后，负载平衡方案需要调度不同路径上的到达流以平衡负载。</p>
+<h2 id="拥塞度量方法">拥塞度量方法</h2>
+<ul>
 <li><strong>基于TCP：</strong>TCP将数据包丢失视为网络拥塞的信号，并在检测到拥塞时减少其拥塞窗口。因此，一些方案利用与TCP或TCP变体类似的信号来检测拥塞。</li>
 <li><strong>发送速率：</strong>流的发送速率是交换机和终端主机可以记录的直接值。通过将增加的发送字节除以时间间隔，可以获得每个流的平均发送速率。该方法通常用于SDN网络，因为OpenFlow交换机自动记录发送的字节，并且控制器可以在任何时间获得该值。</li>
 <li><strong>交换机队列长度：</strong>交换机缓冲区的利用率直接反映了通过该交换机的流量。一些方案使用路径中的交换队列长度来表示路径利用率并检测拥塞。这种方式非常方便在网络方案中使用。</li>
 </ul>
-<p><img src="http://img.meditate.eu.org/note/image-20220918202521677.png" alt="拥塞度量方法"></p>
-<h2 id="路径选择"><a href="#路径选择" class="headerlink" title="路径选择"></a>路径选择</h2><ul>
-<li><strong>最少拥塞：</strong>路径选择的理想机制是将每个流分配给最少拥塞的路径。因此，一些方案收集每条路径的利用率信息，并将流量转发到拥塞最小的路径。该方法的性能与路径利用信息的准确性和响应性高度相关。 </li>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918202521677.png" alt="" /><figcaption>拥塞度量方法</figcaption>
+</figure>
+<h2 id="路径选择">路径选择</h2>
+<ul>
+<li><strong>最少拥塞：</strong>路径选择的理想机制是将每个流分配给最少拥塞的路径。因此，一些方案收集每条路径的利用率信息，并将流量转发到拥塞最小的路径。该方法的性能与路径利用信息的准确性和响应性高度相关。</li>
 <li><strong>较少拥塞：</strong>由于难以实时收集准确的链路利用率，另一种选择路径的方法是将流量从拥塞路径移动到较少拥塞路径。这种方式减少了记录所有路径信息的开销。</li>
-<li><strong>循环：</strong>最初的循环方式是将流<strong>逐个分配</strong>给所有可行路径。由于流和链接信息是不可知的，因此在重负载情况下很容易发生流冲突。因此，一些方案根据数据流的长度或路径利用率来为每条路径加权并循环来平衡流量。该方法的性能与路径权重的精度相关。 </li>
+<li><strong>循环：</strong>最初的循环方式是将流<strong>逐个分配</strong>给所有可行路径。由于流和链接信息是不可知的，因此在重负载情况下很容易发生流冲突。因此，一些方案根据数据流的长度或路径利用率来为每条路径加权并循环来平衡流量。该方法的性能与路径权重的精度相关。</li>
 <li><strong>综合分配：</strong>在前三种方法中，流的路径选择过程相互独立，可能导致局部最优。因此，一些方案将一组流聚合起来，并对它们进行综合分配，以实现全局最优。</li>
 </ul>
-<p><img src="http://img.meditate.eu.org/note/image-20220918202601671.png" alt="路径选择算法"></p>
-<h1 id="用于负载均衡过程的算法"><a href="#用于负载均衡过程的算法" class="headerlink" title="用于负载均衡过程的算法"></a>用于负载均衡过程的算法</h1><h2 id="集中式机制"><a href="#集中式机制" class="headerlink" title="集中式机制"></a>集中式机制</h2><p>在中央控制器上运行的软件可以收集拥塞信息，并基于控制器的全局视图将流分配给路径。例如上图的控制器利用Openflow协议与交换机通信，并通过网络测量应用程序测量网络。借助测量应用程序，负载平衡应用程序可以轻松获得全局链路利用率和流量信息，并使用这些信息来平衡负载。然而，将引入额外的通信开销以向控制器传输信息。粗时间粒度是集中式机制的另一个限制。大多数集中式控制器无法以足够的粒度轮询信息以处理突发事件，并且这种方式开销比较大。 </p>
-<h2 id="分布式机制"><a href="#分布式机制" class="headerlink" title="分布式机制"></a>分布式机制</h2><p>分布式方案在主机或交换机本地选择路径。它们足够迅速地处理数据中心的流量突发，但对于分布式算法来说，收集全局拥塞信息是一个挑战。此外，分布式算法通常是为对称网络设计的，它们很难对拓扑变化做出反应，例如链路故障和交换机崩溃。</p>
+<figure>
+<img src="http://img.meditate.eu.org/note/image-20220918202601671.png" alt="" /><figcaption>路径选择算法</figcaption>
+</figure>
+<h1 id="用于负载均衡过程的算法">用于负载均衡过程的算法</h1>
+<h2 id="集中式机制">集中式机制</h2>
+<p>在中央控制器上运行的软件可以收集拥塞信息，并基于控制器的全局视图将流分配给路径。例如上图的控制器利用Openflow协议与交换机通信，并通过网络测量应用程序测量网络。借助测量应用程序，负载平衡应用程序可以轻松获得全局链路利用率和流量信息，并使用这些信息来平衡负载。然而，将引入额外的通信开销以向控制器传输信息。粗时间粒度是集中式机制的另一个限制。大多数集中式控制器无法以足够的粒度轮询信息以处理突发事件，并且这种方式开销比较大。</p>
+<h2 id="分布式机制">分布式机制</h2>
+<p>分布式方案在主机或交换机本地选择路径。它们足够迅速地处理数据中心的流量突发，但对于分布式算法来说，收集全局拥塞信息是一个挑战。此外，分布式算法通常是为对称网络设计的，它们很难对拓扑变化做出反应，例如链路故障和交换机崩溃。</p>
 
                 
             </div>
