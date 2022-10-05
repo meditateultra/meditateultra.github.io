@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="keywords" content="【论文阅读】Multi-task Learning with Attention for End-to-end Autonomous Driving, Meditate">
     <meta name="description" content="这篇文章是自动驾驶领域的文章，自动驾驶领域往往有两类任务：感知环境（如：语义分割），驾驶决策（根据周围环境做出相应的操作）。
-这篇文章聚焦于自动驾驶中的点对点的导航问题，将多任务学习引入了自动驾驶，并且引入了注意力机制有效提高了准确率，文">
+这篇文章聚焦于自动驾驶中的点对点的导航问题，将多任务学习引入了自动驾驶，并且引入了注意力机制有效提高了准确率，文末">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -395,75 +395,47 @@
 <p>这篇文章聚焦于自动驾驶中的点对点的导航问题，将多任务学习引入了自动驾驶，并且引入了注意力机制有效提高了准确率，文末也通过可视化图热图对注意力机制进行了定性的分析。本文的模型能够识别红绿灯（以往的模型做不到）。</p>
 <p><strong>这篇文章是基于RGB单目相机，并且是端到端的，采用了CIL框架</strong>。（端到端指的是输入是原始数据，输出是最后的结果，原来输入端不是直接的原始数据，而是在原始数据中提取的特征）</p>
 <p>个人认为这篇文章最大的创新点就是利用注意力机制在一个encoder上得到了两个type（对应与上面提到的自动驾驶的两类任务），然后在两个type后面接不同的解码器做不同的任务。</p>
-<h1 id="cbam">CBAM</h1>
-<p>文章中用到了CBAM模块，首先对它进行一个介绍。</p>
+<h1 id="CBAM"><a href="#CBAM" class="headerlink" title="CBAM"></a>CBAM</h1><p>文章中用到了CBAM模块，首先对它进行一个介绍。</p>
 <p><strong>卷积块注意模块（CBAM）</strong>融合了通道注意力机制和空间注意力机制。采用模块化的设计，几乎可以没有开销地嵌入任何网络。</p>
 <p>总体的结构如下图，它首先做通道注意力，再做空间注意力</p>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810100551027.png" alt="" /><figcaption>卷积块注意模块（CBAM）</figcaption>
-</figure>
-<h2 id="通道注意力模块">通道注意力模块</h2>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810100817512.png" alt="" /><figcaption>通道注意力模块</figcaption>
-</figure>
-<ol type="1">
+<p><img src="http://img.meditate.eu.org/note/image-20220810100551027.png" alt="卷积块注意模块（CBAM）"></p>
+<h2 id="通道注意力模块"><a href="#通道注意力模块" class="headerlink" title="通道注意力模块"></a>通道注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810100817512.png" alt="通道注意力模块"></p>
+<ol>
 <li>首先在每个通道上做最大池化和平均池化</li>
 <li>分别将两个向量输入一个全连接的网络，输出要与输入向量的长度保持一致</li>
 <li>将两个向量相加，经过Sigmoid函数。得到的向量表示每个通道对应的权重。</li>
 <li>将向量与输入的特征图的每个对应的通道相乘</li>
 </ol>
-<h2 id="空间注意力模块">空间注意力模块</h2>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810101815278.png" alt="" /><figcaption>空间注意力模块</figcaption>
-</figure>
-<ol type="1">
+<h2 id="空间注意力模块"><a href="#空间注意力模块" class="headerlink" title="空间注意力模块"></a>空间注意力模块</h2><p><img src="http://img.meditate.eu.org/note/image-20220810101815278.png" alt="空间注意力模块"></p>
+<ol>
 <li>沿着通道做最大池化和平均池化。以最大池化为例：就是在所有通道的对应像素点中取一个最大值。得到两个二维的特征图。</li>
-<li>将两个特征图沿着通道拼起来，通过一个卷积层，文章中是7*7的卷积，得到一个<strong>二维</strong>的特征图。</li>
+<li>将两个特征图沿着通道拼起来，通过一个卷积层，文章中是7<em>7的卷积，得到一个<em>*二维</em></em>的特征图。</li>
 <li>经过Sigmoid函数，得到的是特征图中每个像素点对应的权重。</li>
 <li>将权重图与输入图中对应位置相乘。</li>
 </ol>
-<h2 id="resnet引入cbam">ResNet引入CBAM</h2>
-<ul>
+<h2 id="ResNet引入CBAM"><a href="#ResNet引入CBAM" class="headerlink" title="ResNet引入CBAM"></a>ResNet引入CBAM</h2><ul>
 <li>CBAM并不会影响原来的网络结构</li>
 <li>CBAM加在残差连接之前</li>
 </ul>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810102431347.png" alt="" /><figcaption>Resnet中加入CBAM</figcaption>
-</figure>
-<h1 id="网络结构">网络结构</h1>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810103009942.png" alt="" /><figcaption>模型结构</figcaption>
-</figure>
-<h2 id="encoder">Encoder</h2>
-<figure>
-<img src="http://img.meditate.eu.org/note/image-20220810123214170.png" alt="" /><figcaption>Encoder的结构</figcaption>
-</figure>
+<p><img src="http://img.meditate.eu.org/note/image-20220810102431347.png" alt="Resnet中加入CBAM"></p>
+<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p><img src="http://img.meditate.eu.org/note/image-20220810103009942.png" alt="模型结构"></p>
+<h2 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h2><p><img src="http://img.meditate.eu.org/note/image-20220810123214170.png" alt="Encoder的结构"></p>
 <p>主干网络采用了ResNet-34，引申出了两种type。type1后续会接上decoder用于处理语义分割，深度预测的任务。type2会去处理信号灯分类和控制预测。作者也对这种操作做了简单的说明，因为语义分割和深度预测往往需要更高分辨率的特征图以免丢失细节，而信号灯分类和控制预测需要隐藏抽象特征。</p>
 <p>注意这里的Conv Block，经过池化以后通道数是不变的，为了能与下一层的特征图相加，接上了一个卷积来使通道数翻倍。</p>
-<h2 id="decoder">Decoder</h2>
-<p>这一部分文章写得有点坑，图中两个decoder的结构参考了一篇论文，然而那篇论文又参考了另一篇论文o(╥﹏╥)o。然而，我读了两篇论文后，发现这里的结构不可能完全与它们一致。所以实际结构怎么样只有看了源码才知道。不过这并不影响理解这部分。</p>
-<p>实际上简单思考也知道，由于==decoder的输出和网络的输入图像是一样大小的==。因此，这里的decoder肯定是用了几个上采样调整到与原图一样的尺寸，最后接上一个softmax。</p>
+<h2 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h2><p>这一部分文章写得有点坑，图中两个decoder的结构参考了一篇论文，然而那篇论文又参考了另一篇论文o(╥﹏╥)o。然而，我读了两篇论文后，发现这里的结构不可能完全与它们一致。所以实际结构怎么样只有看了源码才知道。不过这并不影响理解这部分。</p>
+<p>实际上简单思考也知道，由于<strong>decoder的输出和网络的输入图像是一样大小的</strong>。因此，这里的decoder肯定是用了几个上采样调整到与原图一样的尺寸，最后接上一个softmax。</p>
 <p>作者也说了，经过实验发现，当segmentation的decoder深度大于depth的decoder深度时，模型的整体效果比较好。</p>
-<h2 id="信号灯分类">信号灯分类</h2>
-<p>分为四类：红，黄，绿，无信号灯。对采集到的每一帧都给出一个分类</p>
+<h2 id="信号灯分类"><a href="#信号灯分类" class="headerlink" title="信号灯分类"></a>信号灯分类</h2><p>分为四类：红，黄，绿，无信号灯。对采集到的每一帧都给出一个分类</p>
 <p>应该就是连个全连接层。</p>
-<h2 id="驾驶模块">驾驶模块</h2>
-<p>这里会有两个额外的输入信息，分别是车辆的速度v和更高级别的命令c（如左转）。type2 的特征图展开成一个向量。</p>
+<h2 id="驾驶模块"><a href="#驾驶模块" class="headerlink" title="驾驶模块"></a>驾驶模块</h2><p>这里会有两个额外的输入信息，分别是车辆的速度v和更高级别的命令c（如左转）。type2 的特征图展开成一个向量。</p>
 <p>驾驶模块中接了四个不同的头，分别对应于4中不同的高级命令（车道保持，左转，右转，直行）。根据输入的高级命令c，选择不同的头输出操作指令。这种多头的结构要好于单头（之前的论文证明过）。</p>
-<p>==说明：==车辆在面对十字路口中，往往可以有多个指令的选择，这会引起歧义。CIL框架为了解决这个问题会给出一个高级命令（如左转）。然后模型根据这个命令给出更加基础的操作（踩油门，踩刹车，转方向盘）。这个高级指令在这篇文章中是使用A*算法做路径规划给出的。它对没一帧的画面都会给出一个c指示下一步前进的方向。</p>
-<h2 id="损失函数">损失函数</h2>
-<p><span class="math display">\[
-L_{total}=\lambda _{control}L_{control}+\lambda _{tl}L_{tl}+\lambda _{seg}L_{seg}+\lambda _{dep}L_{dep}
-\]</span></p>
-<p><span class="math display">\[
-L_{control}=\sum_{c=1}^3{\gamma _cL_c}
-\]</span></p>
-<p><span class="math inline">\(L_{control}\)</span>和<span class="math inline">\(L_{dep}\)</span>采用均方差损失，<span class="math inline">\(L_{tl}\)</span>和<span class="math inline">\(L_{seg}\)</span>采用交叉熵损失。</p>
+<p><strong>说明：</strong>车辆在面对十字路口中，往往可以有多个指令的选择，这会引起歧义。CIL框架为了解决这个问题会给出一个高级命令（如左转）。然后模型根据这个命令给出更加基础的操作（踩油门，踩刹车，转方向盘）。这个高级指令在这篇文章中是使用A*算法做路径规划给出的。它对没一帧的画面都会给出一个c指示下一步前进的方向。</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">
+L_{total}=\lambda _{control}L_{control}+\lambda _{tl}L_{tl}+\lambda _{seg}L_{seg}+\lambda _{dep}L_{dep}</script><script type="math/tex; mode=display">
+L_{control}=\sum_{c=1}^3{\gamma _cL_c}</script><p>$L<em>{control}$和$L</em>{dep}$采用均方差损失，$L<em>{tl}$和$L</em>{seg}$采用交叉熵损失。</p>
 <p>第二个式子中c=1代表转向，c=2代表油门，c=3代表刹车</p>
-<p><span class="math inline">\(\lambda\)</span>和<span class="math inline">\(\gamma\)</span>凭经验设置。</p>
-<h1 id="实验">实验</h1>
-<h2 id="数据集增强和数据集均衡">数据集增强和数据集均衡</h2>
-<p>为了扩充数据集，作者做了数据集增强。</p>
+<p>$\lambda$和$\gamma$凭经验设置。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="数据集增强和数据集均衡"><a href="#数据集增强和数据集均衡" class="headerlink" title="数据集增强和数据集均衡"></a>数据集增强和数据集均衡</h2><p>为了扩充数据集，作者做了数据集增强。</p>
 <p>采集到的数据集是不平衡的（直线行驶特别多），于是文章采用降采样的方法，让直线行驶选中的概率降低。实测下来数据集均衡对于模型非常重要。</p>
 <p>实验结果看看table就明白了。</p>
 
