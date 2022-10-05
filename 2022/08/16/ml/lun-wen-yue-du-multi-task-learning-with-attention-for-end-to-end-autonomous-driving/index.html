@@ -468,14 +468,13 @@ Block，经过池化以后通道数是不变的，为了能与下一层的特征
 <h2 id="损失函数">损失函数</h2>
 <p><span class="math display">\[
 L_{total}=\lambda _{control}L_{control}+\lambda _{tl}L_{tl}+\lambda
-_{seg}L_{seg}+\lambda _{dep}L_{dep}
+_{seg}L_{seg}+\lambda _{dep}L_{dep} \\ L_{control}=\sum_{c=1}^3{\gamma
+_cL_c}
 \]</span></p>
-<p><span class="math display">\[
-L_{control}=\sum_{c=1}^3{\gamma _cL_c}
-\]</span></p>
-<p>$L_{control} <span class="math inline">\(和\)</span>L_{dep} <span
-class="math inline">\(采用均方差损失，\)</span>L_{tl}<span
-class="math inline">\(和\)</span>L_{seg}$采用交叉熵损失。</p>
+<p><span class="math inline">\(L_{control}\)</span>和<span
+class="math inline">\(L_{dep}\)</span>采用均方差损失，<span
+class="math inline">\(L_{tl}\)</span>和<span
+class="math inline">\(L_{seg}\)</span>采用交叉熵损失。</p>
 <p>第二个式子中c=1代表转向，c=2代表油门，c=3代表刹车</p>
 <p><span class="math inline">\(\lambda\)</span>和<span
 class="math inline">\(\gamma\)</span>凭经验设置。</p>
