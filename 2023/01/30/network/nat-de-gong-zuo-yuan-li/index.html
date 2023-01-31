@@ -399,58 +399,71 @@
                 <p>转载：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/aL3nR5XMSVtvU8kbmndJkg">https://mp.weixin.qq.com/s/aL3nR5XMSVtvU8kbmndJkg</a></p>
 <p>大家有没有想过，为什么在公司里访问不了家里的电脑？</p>
 <p>这是因为IPv4地址有限，最大42亿个。为了更好的利用这有限的IP数量，网络分为<strong>局域网和广域网</strong>，将IP分为了<strong>私有IP和公网IP</strong>，一个局域网里的N多台机器都可以<strong>共用一个公网IP</strong>，从而大大增加了”可用IP数量”。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCDa9FPBicl6I9WXFgU4kXFPJaQ5dGff0oRrfuXLb86LP1v64X9LwSHUQ/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">收发数据就像收发快递</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023451.png" alt="NAT_20231311023451"></p>
+<p>收发数据就像收发快递</p>
 <p>当我们需要发送网络包的时候，在IP层，需要填入源IP地址，和目的IP地址，也就是对应快递的发货地址和收货地址。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCtWcyyzfX6f1cG0UH9xxiaI5IpicLQy1GbWSObs5UgbDwjEibpib7ytTd5Q/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">IP报头里含有发送和接收IP地址</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023452.png" alt="NAT_20231311023452"></p>
+<p>IP报头里含有发送和接收IP地址</p>
 <p>但是我们家里的局域网内，基本上都用<code>192.168.xx.xx</code>这样的<strong>私有IP</strong>。</p>
 <p>如果我们在发送网络包的时候，这么填。对方在回数据包的时候该怎么回？毕竟千家万户人用的都是<code>192.168.0.1</code>，网络怎么知道该发给谁？</p>
 <p>所以肯定需要将这个<code>192.168.xx</code><strong>私有IP转换成公有IP</strong>。</p>
 <p>局域网内用的是私有IP，公网用的都是公有IP。一个局域网里的私有IP想访问局域网外的公有IP，必然要做个IP转换，这是在哪里做的转换呢？</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCLqUZujPKKhzFjklnk4LQG9fFqylMx6B2jeeOQ3j3qu1AeUu4icJdHRw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">私有IP和公有IP在哪进行转换</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023453.png" alt="NAT_20231311023453"></p>
+<p>私有IP和公有IP在哪进行转换</p>
 <p>答案是<strong>NAT设备</strong>，全称<strong>N</strong>etwork <strong>A</strong>ddress <strong>T</strong>ranslation，网络地址转换。基本上家用路由器都支持这功能。</p>
 <p>我们来聊下它是怎么工作的。</p>
 <h2 id="NAT的工作原理"><a href="#NAT的工作原理" class="headerlink" title="NAT的工作原理"></a>NAT的工作原理</h2><p>为了简单，我们假设你很富，你家里分到了一个公网 IP 地址 <code>20.20.20.20</code>，对应配到了你家自带 NAT 功能的<strong>家用路由器上</strong>，你家里需要上网的设备有很多，比如你的手机，电脑都需要上网，他们构成了一个<strong>局域网</strong>，用的都是<strong>私有 IP</strong>，比如<code>192.168.xx</code>。其中你在电脑上执行<code>ifconfig</code>命令，发现家里的电脑IP是<code>192.168.30.5</code>。你要访问的公网 IP 地址是<code>30.30.30.30</code>。</p>
 <p>于是就有下面这样一张图</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwC2IR9O1Cme87OGl7YFDMibfZD1GQoTChCKRNglwp9XYtiaKlI288bClyg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">内网IP访问公网IP</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023454.png" alt="NAT_20231311023454"></p>
+<p>内网IP访问公网IP</p>
 <p>当你准备发送数据包的时候，你的电脑内核协议栈就会构造一个IP数据包。这个IP数据包报头里的<strong>发送端</strong>IP地址填的就是<code>192.168.30.5</code>，<strong>接收端</strong>IP地址就是<code>30.30.30.30</code>。将数据包发到NAT路由器中。</p>
 <p>此时NAT路由器会将IP数据包里的<strong>源IP地址</strong>修改一下，私有IP地址<code>192.168.30.5</code>改写为公网IP地址<code>20.20.20.20</code>，这叫<strong>SNAT</strong>（<strong>S</strong>ource <strong>N</strong>etwork <strong>A</strong>ddress <strong>T</strong>ranslation，源地址转换）。并且还会在NAT路由器内部留下一条 <code>192.168.30.5 -&gt; 20.20.20.20</code>的映射记录，这个信息会在后面用到。之后IP数据包经过公网里各个路由器的转发，发到了接收端<code>30.30.30.30</code>，到这里<strong>发送流程</strong>结束。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCib04x5ib5BlUB3kHMZQ23ybfW60ETct9c9AVGfoFgjT2tJoCr5R94EHA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">SNAT</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023455.png" alt="NAT_20231311023455"></p>
+<p>SNAT</p>
 <p>如果接收端处理完数据了，需要发一个响应给你的电脑，那就需要将<strong>发送端</strong>IP地址填上自己的<code>30.30.30.30</code>，将<strong>接收端</strong>地址填为你的公网IP地址<code>20.20.20.20</code>，发往NAT路由器。NAT路由器收到公网来的消息之后，会检查下自己之前留下的映射信息，发现之前留下了这么一条 <code>192.168.30.5 -&gt; 20.20.20.20</code>记录，就会将这个数据包的<strong>目的IP地址</strong>修改一下，变成内网IP地址<code>192.168.30.5</code>, 这也叫<code>DNAT</code>（<strong>D</strong>estination <strong>N</strong>etwork <strong>A</strong>ddress <strong>T</strong>ranslation，目的地址转换）。之后将其转发给你的电脑上。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCz4DJPYDjI2C3TtpNAhwaqEPJG2q3ic1fFPO9OdMtzdtiaQXd9gKYpdTg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">DNAT</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023456.png" alt="NAT_20231311023456"></p>
+<p>DNAT</p>
 <p>整个过程下来，NAT悄悄的改了IP数据包的发送和接收端IP地址，但对真正的发送方和接收方来说，他们却<strong>对这件事情，一无所知</strong>。</p>
 <p>这就是NAT的工作原理。</p>
 <h2 id="NAPT的原理"><a href="#NAPT的原理" class="headerlink" title="NAPT的原理"></a>NAPT的原理</h2><p>到这里，相信大家都有一个很大的疑问。</p>
 <p>局域网里并不只有一台机器，局域网内每台机器都在 NAT 下留下的映射信息都会是 <code>192.168.xx.xx -&gt; 20.20.20.20</code>，发送消息是没啥事，但<strong>接收</strong>消息的时候就不知道该回给谁了。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCRJX74Sgt1kEVKMe0ypazYnUYHwu7fKeDwUaq1aMJOPdSX843LyKg5g/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">NAT的问题</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023457.png" alt="NAT_20231311023457"></p>
+<p>NAT的问题</p>
 <p>这问题相当致命，因此<strong>实际上大部分时候不会使用普通的 NAT</strong>。</p>
 <p>那怎么办呢？</p>
 <p>问题出在我们没办法区分内网里的多个网络连接。</p>
 <p>于是乎。</p>
 <p>我们可以<strong>加入其他信息去区分内网里的各个网络连接，很自然就能想到端口。</strong></p>
 <p>但IP数据包（<strong>网络层</strong>）本身是没有端口信息的。常见的<strong>传输层</strong>协议TCP和UDP数据报文里才有<strong>端口</strong>的信息。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCCxvASlnL0mk5WQgDKeSCNTCFFVNlrBOibZCez1ric5ARCr1J2lHx4IfA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">TCP 报头有端口号</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCKaccTchaBITNPzkAUiaHdDNe0IvUoQ98T9VGtDEq7sa9pVugC9CK1dA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">UDP 报头也有端口号</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023458.png" alt="NAT_20231311023458"></p>
+<p>TCP 报头有端口号</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_20231311023459.png" alt="NAT_20231311023459"></p>
+<p>UDP 报头也有端口号</p>
 <p>于是流程就变成了下面这样子。</p>
 <p>当你准备发送数据包的时候，你的电脑内核协议栈就会先构造一个TCP或者UDP数据报头，里面写入端口号，比如发送端口是<code>5000</code>，接收端口是<code>3000</code>，然后在这个基础上，加入 IP 数据报头，填入发送端和接收端的 IP 地址。</p>
 <p>那数据包长这样。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCHHCqwYyoK0zibAcLBu0uYpIjKxd4RibgcLBISticmJhIJ7ujb4sUkibOSw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">数据包的构成</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234510.png" alt="NAT_202313110234510"></p>
+<p>数据包的构成</p>
 <p>假设，<strong>发送端</strong>IP地址填的就是<code>192.168.30.5</code>，<strong>接收端</strong>IP地址就是<code>30.30.30.30</code>。</p>
 <p>将数据包发到NAT路由器中。</p>
 <p>此时NAT路由器会将IP数据包里的<strong>源IP地址和端口号</strong>修改一下，从<code>192.168.30.5:5000</code>改写成<code>20.20.20.20:6000</code>。并且还会在NAT路由器内部留下一条 <code>192.168.30.5:5000 -&gt; 20.20.20.20:6000</code>的映射记录。之后数据包经过公网里各个路由器的转发，发到了接收端<code>30.30.30.30:3000</code>，到这里<strong>发送流程</strong>结束。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCKlAjibbPibjCl8aiaLbhD4rarQTXgaaYoFc9cVG0yeEB9z27DCA25gvibA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">NAPT发送数据</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234511.png" alt="NAT_202313110234511"></p>
+<p>NAPT发送数据</p>
 <p>接收端响应时，就会在数据包里填入<strong>发送端</strong>地址是<code>30.30.30.30:3000</code>，将<strong>接收端</strong>是<code>20.20.20.20:6000</code>，发往NAT路由器。NAT路由器发现下自己之前留下过这么一条 <code>192.168.30.5:5000 -&gt; 20.20.20.20:6000</code>的记录，就会将这个数据包的<strong>目的IP地址和端口</strong>修改一下，变回原来的<code>192.168.30.5:5000</code>。之后将其转发给你的电脑上。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCn7WxQHSknzD2fQBlUrmQUh6yORS3MuRD9qDa08q9kMqCicO2giaswgvw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">NAPT接收数据</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234512.png" alt="NAT_202313110234512"></p>
+<p>NAPT接收数据</p>
 <p>如果局域网内有多个设备，他们就会映射到不同的公网端口上，毕竟端口最大可达 65535，完全够用。这样大家都可以相安无事。</p>
 <p>像这种同时转换 <strong>IP 和端口</strong>的技术，就是<strong>NAPT</strong>（Network Address Port Transfer , <strong>网络地址端口转换</strong> ）。</p>
 <p>看到这里，问题就来了。</p>
 <p>那这么说<strong>只有用到端口的网络协议才能被 NAT 识别出来并转发？</strong></p>
 <p>但这怎么解释<code>ping</code>命令？ping基于 ICMP 协议，而 ICMP 协议报文里并不带<code>端口</code>信息。我依然可以正常的ping通公网机器并收到回包。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCMSngCuFA6mf6MxuD4XwF7XOX5HsF7iaS7tczWMU9nX3EsibxpVHLuHlA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">ping报头</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234513.png" alt="NAT_202313110234513"></p>
+<p>ping报头</p>
 <p>事实上针对 ICMP 协议，NAT 路由器做了特殊处理。ping 报文头里有个<code>Identifier</code>的信息，它其实指的是放出ping命令的<strong>进程id</strong>。</p>
 <p>对 NAT 路由器来说，这个<code>Identifier</code>的作用就跟<code>端口</code>一样。</p>
 <p>另外，当我们去抓包的时候，就会发现有两个<code>Identifier</code>，一个后面带个<code>BE（Big Endian）</code>，另一个带个<code>LE（Little Endian）</code>。</p>
 <p>其实他们都是<strong>同一个数值</strong>，只不过<strong>大小端不同</strong>，读出来的值不一样。就好像同样的数字345，反着读就成了543。这是为了兼容不同操作系统（比如linux和Windows）下大小端不同的情况。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCjeGAmm5nC8e6C7yHibBCZrdn1dvkD6w5eiblIHC4d64spT54mwS2Y8og/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image"></p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234514.png" alt="NAT_202313110234514"></p>
 <h2 id="内网穿透是什么"><a href="#内网穿透是什么" class="headerlink" title="内网穿透是什么"></a>内网穿透是什么</h2><p>看到这里，我们大概也发现了。使用了NAT上网的话，前提得<strong>内网机器主动请求公网 IP</strong>，这样NAT才能将内网的 <strong>IP 端口</strong>转成外网 <strong>IP 端口</strong>。</p>
 <p>反过来公网的机器想主动请求内网机器，就会被拦在 NAT 路由器上，此时由于 NAT 路由器并没有任何相关的 IP 端口的<strong>映射记录</strong>，因此也就不会转发数据给内网里的任何一台机器。</p>
 <p>举个现实中的场景就是，你在你家里的电脑上启动了一个 HTTP 服务，地址是192.168.30.5:5000，此时你在公司办公室里想通过手机去访问一下，却发现访问不了。</p>
@@ -461,16 +474,19 @@
 <p>说到底，因为 NAT 的存在，我们只能从内网主动发起连接，否则 NAT 设备不会记录相应的映射关系，没有映射关系也就不能转发数据。</p>
 <p>所以我们就在<strong>公网上</strong>加一台服务器 x，并暴露一个访问域名，再让内网的服务<strong>主动</strong>连接服务器 x，这样NAT路由器上就有对应的<strong>映射关系</strong>。接着，所有人都去访问服务器x，服务器x将数据转发给内网机器，再原路返回响应，这样数据就都通了。这就是所谓的<strong>内网穿透</strong>。</p>
 <p>像上面提到的服务器x，你也不需要自己去搭，已经有很多现成的方案，花钱就完事了，比如花某壳。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwC8zvSqFo5brI5ibzIs4U58mhmp0jom35E0yo453CibpPmby1KzCbwj69A/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">内网穿透</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234515.png" alt="NAT_202313110234515"></p>
+<p>内网穿透</p>
 <p>到这里，我们就可以回答这个问题：</p>
 <p><strong>为什么我在公司里访问不了家里的电脑？</strong></p>
 <p>那是因为家里的电脑在局域网内，局域网和广域网之间有个 NAT 路由器。由于 NAT 路由器的存在，外网服务无法主动连通局域网内的电脑。</p>
 <h3 id="两个内网的聊天软件如何建立通讯"><a href="#两个内网的聊天软件如何建立通讯" class="headerlink" title="两个内网的聊天软件如何建立通讯"></a>两个内网的聊天软件如何建立通讯</h3><p>好了，问题就叒来了。</p>
 <p>我家机子是在我们小区的局域网里，班花家的机子也是在她们小区的局域网里。都在局域网里，且 NAT 只能从内网连到外网，那我电脑上登录的QQ是怎么和班花电脑里的QQ连上的呢？</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCxWxOyyI6SHY3icND5njTU4ibWwYBFZgvz4NZFQn9dJxXOQvPq06iaMXicA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">两个局域网内的服务无法直接连通</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234516.png" alt="NAT_202313110234516"></p>
+<p>两个局域网内的服务无法直接连通</p>
 <p>上面这个问法其实是存在个误解，误以为两个 qq 客户端应用是直接建立连接的。</p>
 <p>然而实际上并不是，两个 qq 客户端之间还隔了一个服务器。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCTMibmJsvFgDbP3YUfWO8ANVtKQb8qxhps9pW58GCcOLc3pyD9TtpBjg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">聊天软件会主动与公网服务器建立连接</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234517.png" alt="NAT_202313110234517"></p>
+<p>聊天软件会主动与公网服务器建立连接</p>
 <p>也就是说，两个在内网的客户端登录 qq 时都会<strong>主动</strong>向公网的聊天服务器建立连接，这时两方的 NAT 路由器中都会记录有相应的映射关系。当在其中一个 qq 上发送消息时，数据会先到服务器，再通过服务器转发到另外一个客户端上。反过来也一样，通过这个方式让两台内网的机子进行数据传输。</p>
 <h3 id="两个内网的应用如何直接建立连接"><a href="#两个内网的应用如何直接建立连接" class="headerlink" title="两个内网的应用如何直接建立连接"></a>两个内网的应用如何直接建立连接</h3><p>上面的情况，是两个客户端通过<strong>第三方服务器</strong>进行通讯，但有些场景就是要<strong>抛开第三端</strong>，直接进行两端通信，比如 P2P 下载，这种该怎么办呢？</p>
 <p>这种情况下，其实也还是离不开第三方服务器的帮助。</p>
@@ -481,17 +497,19 @@
 <p><strong>step5和step6以及step7</strong>: 重点来了。此时 server 发消息给 A，让 A 主动发<code>UDP</code>消息到 B 的外网 IP 地址和端口。此时 NAT_B 收到这个 A 的UDP数据包时，这时候<strong>根据 NAT_B 的设置不同</strong>，导致这时候<strong>有可能</strong> NAT_B 能直接转发数据到 B，那此时 A 和 B 就通了。但也<strong>有可能不通</strong>，直接丢包，不过丢包没关系，这个操作的<strong>目的是</strong>给 NAT_A 上留下<strong>有关 B 的映射关系</strong>。</p>
 <p><strong>step8和step9以及step10</strong>: 跟step5一样熟悉的配方，此时 server 再发消息给 B，让 B 主动发<code>UDP</code>消息到 A 的外网 IP 地址和端口。NAT_B 上也留下了关于 A 的映射关系，这时候由于之前 NAT_A 上有过关于 B 的映射关系，此时 NAT_A 就能正常接受 B 的数据包，并将其转发给 A。到这里 A 和 B 就能正常进行数据通信了。这就是所谓的 <strong>NAT 打洞</strong>。</p>
 <p><strong>step11</strong>: 注意，之前我们都是用的 <strong>UDP 数据包</strong>，目的只是为了在两个局域网的 NAT 上<strong>打个洞</strong>出来，实际上大部分应用用的都是 TCP 连接，所以，这时候我们还需要在 A 主动向 B 发起 TCP 连接。到此，我们就完成了两端之间的通信。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCZPxx03qnws1ZxT1s3AszpspmkTXWO5Zq9b98ayfibkemnwLreLj8Omg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">NAT打洞</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234518.png" alt="NAT_202313110234518"></p>
+<p>NAT打洞</p>
 <p>这里估计大家会有疑惑。</p>
 <h4 id="端口已经被udp用过了，TCP再用，那岂不是端口重复占用（address-already-in-use）？"><a href="#端口已经被udp用过了，TCP再用，那岂不是端口重复占用（address-already-in-use）？" class="headerlink" title="端口已经被udp用过了，TCP再用，那岂不是端口重复占用（address already in use）？"></a>端口已经被udp用过了，TCP再用，那岂不是端口重复占用（address already in use）？</h4><p>其实并不会，端口重复占用的报错<strong>常见于</strong>两个TCP连接在不使用<code>SO_REUSEADDR</code>的情况下，重复使用了某个IP端口。而UDP和TCP之间却不会报这个错。之所以会有这个错，主要是因为在一个linux内核中，内核收到网络数据时，会通过五元组（<code>传输协议，源IP，目的IP，源端口，目的端口</code>）去唯一确定数据接受者。当五元组都一模一样的时候，内核就不知道该把数据发给谁。而UDP和TCP之间”传输协议”不同，因此五元组也不同，所以也就不会有上面的问题。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwCAtTuBnKu0xluEoP8ObwAuMyHcSWkcxibdwJmJx28Yqeg6UneO5yXY0g/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image">五元组</p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234519.png" alt="NAT_202313110234519"></p>
+<p>五元组</p>
 <h4 id="NAPT还分为好多种类型，上面的-NAT-打洞方案，都能成功吗？"><a href="#NAPT还分为好多种类型，上面的-NAT-打洞方案，都能成功吗？" class="headerlink" title="NAPT还分为好多种类型，上面的 NAT 打洞方案，都能成功吗？"></a>NAPT还分为好多种类型，上面的 NAT 打洞方案，都能成功吗？</h4><p>关于NAPT，确实还细分为好几种类型，比如完全锥形NAT和限制型NAT啥的，但这并不是本文的重点。所以我就略过了。我们现在常见的都是锥形NAT。上面的打洞方案适用于大部分场景，这其中包括限制最多的<strong>端口受限锥形NAT</strong>。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/AnAgeMhDIialv6kg0JthaZDYINaceCvwC3a8SQWNz3q6ck3l8hnhMvlhHkBCQzDQmUQgeONKjztAqtf2awFUU3A/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Image"></p>
+<p><img src="http://img.meditate.eu.org/note/NAT_202313110234520.png" alt="NAT_202313110234520"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li>IPV4 地址有限，但通过 NAT 路由器，可以使得整个内网 N 多台机器，对外只使用一个公网 IP，大大节省了 IP 资源。</li>
-<li>内网机子<strong>主动</strong>连接公网 IP，中间的 NAT 会将内网机子的内网 IP 转换为公网 IP，从而实现内网和外网的数据交互。</li>
-<li>普通的 NAT 技术，只会修改网络包中的发送端和接收端 IP 地址，当内网设备较多时，将有可能导致冲突。因此一般都会使用 NAPT 技术，同时修改发送端和接收端的 <strong>IP 地址和端口</strong>。</li>
-<li>由于 NAT 的存在，公网 IP 是无法访问内网服务的，但通过内网穿透技术，就可以让公网 IP 访问内网服务。一波操作下来，就可以在公司的网络里访问家里的电脑。</li>
+<li>• IPV4 地址有限，但通过 NAT 路由器，可以使得整个内网 N 多台机器，对外只使用一个公网 IP，大大节省了 IP 资源。</li>
+<li>• 内网机子<strong>主动</strong>连接公网 IP，中间的 NAT 会将内网机子的内网 IP 转换为公网 IP，从而实现内网和外网的数据交互。</li>
+<li>• 普通的 NAT 技术，只会修改网络包中的发送端和接收端 IP 地址，当内网设备较多时，将有可能导致冲突。因此一般都会使用 NAPT 技术，同时修改发送端和接收端的 <strong>IP 地址和端口</strong>。</li>
+<li>• 由于 NAT 的存在，公网 IP 是无法访问内网服务的，但通过内网穿透技术，就可以让公网 IP 访问内网服务。一波操作下来，就可以在公司的网络里访问家里的电脑。</li>
 </ul>
 <p>最后留个问题，有了 NAT 之后，原本并不富裕的 IPv4 地址突然就变得非常够用了。</p>
 <p>那我们为什么还需要 IPv6？</p>
